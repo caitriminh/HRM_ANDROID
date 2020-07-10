@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_phepnam"
+        android:icon="@drawable/ic_menu_phepnam2"
+        android:title="1. Phép năm"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_nhatky_quetthe"
+        android:icon="@drawable/ic_menu_quetthe2"
+        android:title="2. Nhật ký quét thẻ" />
+
+    <item
+        android:id="@+id/menu_nghiphep"
+        android:icon="@drawable/ic_menu_nghiphep"
+        android:title="3. Nhật ký nghỉ phép" />
+
+    <item
+        android:id="@+id/menu_hopdonglaodong"
+        android:icon="@drawable/ic_menu_hopdong2"
+        android:title="4. Hợp đồng lao động" />
+
+    <item
+        android:id="@+id/menu_xemanh"
+        android:icon="@drawable/ic_menu_xemanh"
+        android:title="5. Xem ảnh" />
+
+    <item
+        android:id="@+id/menu_upload"
+        android:icon="@drawable/ic_menu_upload"
+        android:title="6. Upload ảnh" />
+</menu>

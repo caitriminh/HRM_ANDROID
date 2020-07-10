@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/txtMaNV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập mã nhân viên..." />
+
+    <TextView
+        android:id="@+id/txtHoTen"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/txtMaNV"
+        android:layout_alignParentStart="true"
+        android:gravity="left|bottom"
+        android:hint=" Họ và tên"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/txtPhanXuong"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/txtHoTen"
+        android:layout_alignParentStart="true"
+        android:gravity="left|bottom"
+        android:hint=" Xưởng/Phòng ban"
+        android:textSize="18dp" />
+
+
+    <TextView
+        android:id="@+id/txtGioRa"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/txtPhanXuong"
+        android:layout_alignParentStart="true"
+        android:gravity="left|bottom"
+        android:hint=" Chọn giờ ra..."
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/txtGioVao"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/txtGioRa"
+        android:layout_alignParentStart="true"
+        android:gravity="left|bottom"
+        android:hint=" Chọn giờ vào..."
+        android:textSize="18dp" />
+
+
+
+    <TextView
+        android:id="@+id/txtLoaiNghiPhep"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/txtDenNgay"
+        android:layout_alignParentStart="true"
+        android:gravity="left|bottom"
+        android:hint=" Chọn lý do..."
+        android:textSize="18dp" />
+
+
+
+    <EditText
+        android:id="@+id/txtGhiChu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSoNgay"
+        android:hint="Ghi chú..." />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtGhiChu"
+        android:gravity="right|bottom"
+        android:orientation="horizontal">
+
+        <com.ornach.nobobutton.NoboButton
+            android:id="@+id/btnLuu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtGhiChu"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            app:nb_backgroundColor="@color/colorPrimary"
+            app:nb_borderColor="#FFFFFF"
+            app:nb_borderWidth="2dp"
+            app:nb_focusColor="#B83CC3"
+            app:nb_fontIcon="&#xf0c7;"
+            app:nb_radius="5dp"
+            app:nb_text="Lưu"
+            app:nb_textColor="#FFF"
+            app:nb_textSize="16dp" />
+
+        <com.ornach.nobobutton.NoboButton
+            android:id="@+id/btnDong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtGhiChu"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            app:nb_backgroundColor="#EF3D56"
+            app:nb_borderColor="#FFFFFF"
+            app:nb_borderWidth="2dp"
+            app:nb_focusColor="#B83CC3"
+            app:nb_fontIcon="&#xf2d3;"
+            app:nb_radius="5dp"
+            app:nb_text="Đóng"
+            app:nb_textColor="#FFF"
+            app:nb_textSize="16dp" />
+    </LinearLayout>
+</LinearLayout>

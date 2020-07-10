@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">HRM 2020</string>
+    <string name="title_activity_login_new">LoginActivityNew</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_phongban">Xưởng/Phòng Ban</string>
+    <string name="menu_chuyen">Chuyền/Bộ Phận</string>
+    <string name="menu_to">Tổ</string>
+
+    <string name="menu_nhanvien">Nhân viên</string>
+    <string name="menu_nghiviec">Nghỉ việc</string>
+    <string name="menu_thaisan">Thai sản</string>
+    <string name="menu_phepnam">Phép năm</string>
+
+    <string name="menu_quetthe">Nhật ký quét thẻ</string>
+    <string name="menu_diemdanh">Điểm danh</string>
+
+    <string name="menu_lenhtangca">Lệnh tăng ca</string>
+    <string name="menu_tangca">Tăng ca</string>
+
+
+    <string name="menu_nghiphep">Nghỉ phép</string>
+    <string name="menu_vesom">Về sớm</string>
+    <string name="menu_congtac">Công tác</string>
+
+    <string name="menu_hopdong_laodong">Hợp đồng lao động</string>
+    <string name="menu_baohiem">Bảo hiểm</string>
+    <string name="menu_thietlap">Thiết lập</string>
+    <string name="menu_nguoidung">Người dùng</string>
+    <string name="menu_dangxuat">Đăng xuất</string>
+</resources>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_id"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:theme="@style/AppTheme"
+    cardview:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:id="@id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_avatar"></ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:weightSum="8">
+
+            <TextView
+                android:id="@+id/txtMaNV"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Mã nhân viên: 002597"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/txtHoTen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="CÁI TRÍ MINH"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                >
+                <TextView
+                    android:id="@+id/txtNgaySinh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="NS: 13/03/1987"></TextView>
+
+                <TextView
+                    android:id="@+id/txtNgayVaoLam"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="NV: 13/03/1987"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                                >
+                <TextView
+                    android:id="@+id/txtNoiSinh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="N.sinh: TP. Hồ Chí Minh"></TextView>
+
+                <TextView
+                    android:id="@+id/txtNguyenQuan"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="NQ: TP. Hồ Chí Minh"></TextView>
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/txtDiaChi"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxLines="1"
+                android:scrollHorizontally="false"
+                android:singleLine="true"
+                android:text="Địa chỉ: Đồng Nai"></TextView>
+
+            <TextView
+                android:id="@+id/txtPhanXuong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="BP. ERP"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/txtChuyen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="BP. ERP"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtTo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:text="ERP"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtMenuOpTion"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:gravity="center|right"
+                    android:paddingRight="8dp"
+                    android:text="&#8942;"
+                    android:textSize="16dp"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

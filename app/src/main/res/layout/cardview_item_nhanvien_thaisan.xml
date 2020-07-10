@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_id"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:theme="@style/AppTheme"
+    cardview:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:id="@id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_avatar"></ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:weightSum="8">
+
+            <TextView
+                android:id="@+id/txtMaNV"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Mã nhân viên: 002597"></TextView>
+
+            <TextView
+                android:id="@+id/txtHoTen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="CÁI TRÍ MINH"></TextView>
+
+            <TextView
+                android:id="@+id/txtNgayNghiTS"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Ngày nghỉ: 20/07/2020"></TextView>
+
+            <TextView
+                android:id="@+id/txtNgayLamLai"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Ngày sinh: 13/03/1987"></TextView>
+
+            <TextView
+                android:id="@+id/txtPhanXuong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="KẾ TOÁN TÀI CHÍNH"></TextView>
+
+            <TextView
+                android:id="@+id/txtChuyen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Kế toán"></TextView>
+            <TextView
+                android:id="@+id/txtTo"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Kế toán"></TextView>
+
+            <TextView
+                android:id="@+id/txtTrangThai"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Trạng thái: Nghỉ thai sản"></TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="Nhân Sự">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_nhanvien"
+                    android:icon="@drawable/ic_menu_nhanvien"
+                    android:title="@string/menu_nhanvien" />
+                <item
+                    android:id="@+id/nav_nghiviec"
+                    android:icon="@drawable/ic_menu_nghiviec"
+                    android:title="@string/menu_nghiviec" />
+                <item
+                    android:id="@+id/nav_thaisan"
+                    android:icon="@drawable/ic_menu_thaisan"
+                    android:title="@string/menu_thaisan" />
+
+                <item
+                    android:id="@+id/nav_phepnam"
+                    android:icon="@drawable/ic_menu_phepnam"
+                    android:title="@string/menu_phepnam" />
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Quét Thẻ">
+        <menu>
+            <item
+                android:id="@+id/nav_nhatky_quetthe"
+                android:icon="@drawable/ic_menu_quetthe"
+                android:title="@string/menu_quetthe" />
+            <item
+                android:id="@+id/nav_diemdanh"
+                android:icon="@drawable/ic_menu_diemdanh"
+                android:title="@string/menu_diemdanh" />
+
+        </menu>
+    </item>
+
+    <item android:title="Tăng ca">
+        <menu>
+            <item
+                android:id="@+id/nav_lenhtangca"
+                android:icon="@drawable/ic_menu_lenhtangca"
+                android:title="@string/menu_lenhtangca" />
+            <item
+                android:id="@+id/nav_tangca"
+                android:icon="@drawable/ic_menu_tangca"
+                android:title="@string/menu_tangca" />
+
+        </menu>
+    </item>
+    <item android:title="Nghỉ Phép - Về Sớm - Công Tác">
+        <menu>
+            <item
+                android:id="@+id/nav_nghiphep"
+                android:icon="@drawable/ic_menu_nghiphep"
+                android:title="@string/menu_nghiphep" />
+            <item
+                android:id="@+id/nav_vesom"
+                android:icon="@drawable/ic_menu_vesom"
+                android:title="@string/menu_vesom" />
+            <item
+                android:id="@+id/nav_congtac"
+                android:icon="@drawable/ic_menu_congtac"
+                android:title="@string/menu_congtac" />
+        </menu>
+    </item>
+
+    <item android:title="Hợp Đồng - Bảo Hiểm">
+        <menu>
+            <item
+                android:id="@+id/nav_hopdong_laodong"
+                android:icon="@drawable/ic_menu_hopdong"
+                android:title="@string/menu_hopdong_laodong" />
+            <item
+                android:id="@+id/nav_baohiem"
+                android:icon="@drawable/ic_menu_vesom"
+                android:title="@string/menu_baohiem" />
+
+        </menu>
+    </item>
+
+    <item android:title="Hệ Thống">
+        <menu>
+            <item
+                android:id="@+id/nav_nguoidung"
+                android:icon="@drawable/ic_menu_user"
+                android:title="@string/menu_nguoidung" />
+
+            <item
+                android:id="@+id/nav_thietlap"
+                android:icon="@drawable/ic_menu_nghiphep"
+                android:title="@string/menu_thietlap" />
+            <item
+                android:id="@+id/nav_dangxuat"
+                android:icon="@drawable/ic_menu_vesom"
+                android:title="@string/menu_dangxuat" />
+
+        </menu>
+    </item>
+</menu>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_id"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:theme="@style/AppTheme"
+    cardview:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:id="@id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_avatar"></ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:weightSum="8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtMaNV"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="Mã nhân viên: 002597"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtMaSoHD"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="right"
+                    android:text="HĐ Số: 002597-01"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtHoTen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="CÁI TRÍ MINH"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/txtPhanXuong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Phân xưởng: BP. ERP">
+                </TextView>
+
+            <TextView
+                android:id="@+id/txtChucVu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Chức vụ: Giám đốc tài chính">
+                </TextView>
+
+            <TextView
+                android:id="@+id/txtLoaiHopDong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Loại: Hợp đồng không thời hạn"
+                android:textStyle="bold"></TextView>
+
+
+            <TextView
+                android:id="@+id/txtNgayKy"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Ngày ký: 01/01/2010"></TextView>
+
+
+            <TextView
+                android:id="@+id/txtMucLuong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+               android:textStyle="bold"
+                android:text="Mức lương: 7,000,000"></TextView>
+
+            <TextView
+                android:id="@+id/txtTinhTrang"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                              android:textStyle="bold"
+                android:text="Tình trang: Đang hiệu lực"></TextView>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

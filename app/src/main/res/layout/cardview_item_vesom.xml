@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_id"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:theme="@style/AppTheme"
+    cardview:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:id="@id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_avatar"></ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:weightSum="8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtMaNV"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="Mã nhân viên: 002597"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtNgayDangKy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="right"
+                    android:text="25/12/2019"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtHoTen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="CÁI TRÍ MINH"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/txtPhanXuong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Phân xưởng: BP. ERP"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/txtChuyen"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Chuyền: BP. ERP"
+                android:textStyle="bold"></TextView>
+
+
+            <TextView
+                android:id="@+id/txtGioRa_GioVao"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Giờ ra: 15:30 - Giờ vào: "></TextView>
+
+
+            <TextView
+                android:id="@+id/txtLyDo"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxLines="1"
+                android:scrollHorizontally="false"
+                android:singleLine="true"
+                android:text="Lý do: Việc riêng"></TextView>
+
+            <TextView
+                android:id="@+id/txtGhiChu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxLines="1"
+                android:scrollHorizontally="false"
+                android:singleLine="true"
+                android:text="Ghi chú: Về quê lấy chồng"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1"                >
+
+                <TextView
+                    android:id="@+id/txtNguoiDuyet"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:text="NGUYỄN THỊ HOÀNG ANH"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtMenuOpTion"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:gravity="center|center_vertical"
+                    android:text="&#8942;"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
