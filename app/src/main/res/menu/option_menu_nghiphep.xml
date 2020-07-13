@@ -17,7 +17,7 @@
     <item
         android:id="@+id/menu_ct_nghiphep"
         android:icon="@drawable/ic_ct_nghiphep"
-        android:title="3. Chi tiết nghỉ phép" />
+        android:title="3. Nhật ký nghỉ phép" />
 
     <item
         android:id="@+id/menu_xemanh"

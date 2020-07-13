@@ -23,6 +23,8 @@ import com.example.myapplication.Model.NhanVien;
 import com.example.myapplication.Model.NhanVienNghiViec;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
+import com.example.myapplication.libs.springyRecyclerView.SpringyAdapterAnimationType;
+import com.example.myapplication.libs.springyRecyclerView.SpringyAdapterAnimator;
 import com.example.myapplication.ui.NhatKyQuetThe.NhatKyQuetThe_MaNV_Activity;
 import com.example.myapplication.ui.nghiphep.NghiPhep_MaNV_Activity;
 import com.squareup.picasso.MemoryPolicy;
@@ -46,6 +48,7 @@ public class Adapter_NhanVien extends RecyclerView.Adapter<Adapter_NhanVien.Recy
     private Unbinder unbinder;
     Fragment NhanVienFragment;
     public NhanVien nhanVien;
+    private SpringyAdapterAnimator mAnimator;
 
     public Adapter_NhanVien(Context mContext, List<NhanVien> data) {
         this.data = data;
@@ -59,6 +62,7 @@ public class Adapter_NhanVien extends RecyclerView.Adapter<Adapter_NhanVien.Recy
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.cardview_item_nhanvien, parent, false);
 
+        mAnimator.onSpringItemCreate(view);
         return new RecyclerViewHolder(view);
     }
 
@@ -114,7 +118,7 @@ public class Adapter_NhanVien extends RecyclerView.Adapter<Adapter_NhanVien.Recy
                                 mContext.startActivity(intent);
                                 break;
                             case R.id.menu_nghiphep:
-                                Modules1.objNhanVien = data.get(position);
+                                Modules1.strMaNV = data.get(position).getManv2();
                                 Intent intent_nghiphep = new Intent(mContext, NghiPhep_MaNV_Activity.class);
                                 mContext.startActivity(intent_nghiphep);
                                 break;
@@ -133,10 +137,24 @@ public class Adapter_NhanVien extends RecyclerView.Adapter<Adapter_NhanVien.Recy
                 popup.show();
             }
         });
+        mAnimator.onSpringItemBind(holder.itemView, position);
     }
 
+    public Adapter_NhanVien(Context mContext, ArrayList<NhanVien> titleList, RecyclerView recyclerView) {
+        this.data = titleList;
+        this.mContext = mContext;
+        if (titleList.size() > 0) {
+
+            temp.addAll(titleList);
+        }
+        mAnimator = new SpringyAdapterAnimator(recyclerView);
+        mAnimator.setSpringAnimationType(SpringyAdapterAnimationType.SLIDE_FROM_RIGHT);
+        mAnimator.addConfig(100, 15);
+    }
+
+
     //Set màu trắng đen cho Image View
-    private void setBW(ImageView iv){
+    private void setBW(ImageView iv) {
         float brightness = 10; // change values to suite your need
         float[] colorMatrix = {
                 0.33f, 0.33f, 0.33f, 0, brightness,

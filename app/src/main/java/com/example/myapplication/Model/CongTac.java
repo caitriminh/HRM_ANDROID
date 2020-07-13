@@ -11,6 +11,11 @@ public class CongTac {
     @SerializedName("manv")
     @Expose
     private String manv;
+
+    @SerializedName("manv2")
+    @Expose
+    private String manv2;
+
     @SerializedName("tennv")
     @Expose
     private String tennv;
@@ -47,6 +52,10 @@ public class CongTac {
     @Expose
     private String status_nhansu;
 
+    @SerializedName("giodi")
+    @Expose
+    private String giodi;
+
     public Integer getId() {
         return id;
     }
@@ -61,6 +70,14 @@ public class CongTac {
 
     public void setManv(String manv) {
         this.manv = manv;
+    }
+
+    public String getManv2() {
+        return manv2;
+    }
+
+    public void setManv2(String manv2) {
+        this.manv2 = manv2;
     }
 
     public String getTennv() {
@@ -149,6 +166,14 @@ public class CongTac {
 
     public void setStatus_nhansu(String status_nhansu) {
         this.status_nhansu = status_nhansu;
+    }
+
+    public String getGiodi() {
+        return giodi;
+    }
+
+    public void setGiodi(String giodi) {
+        this.giodi = giodi;
     }
 
 }

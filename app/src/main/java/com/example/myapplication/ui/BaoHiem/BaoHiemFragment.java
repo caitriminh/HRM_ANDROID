@@ -1,9 +1,9 @@
-package com.example.myapplication.ui.nhanvien;
+package com.example.myapplication.ui.BaoHiem;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +22,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-
+import com.example.myapplication.Adapter.Adapter_BaoHiem;
 import com.example.myapplication.Adapter.Adapter_NhanVien;
 import com.example.myapplication.AsyncPostHttpRequest;
 import com.example.myapplication.Interface.ClickListener;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.MainActivity;
+import com.example.myapplication.Model.BaoHiem;
+import com.example.myapplication.Model.CongTac;
 import com.example.myapplication.Model.NhanVien;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
@@ -36,11 +38,12 @@ import com.example.myapplication.ui.ScanQR.ScanQR_Activity;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
-
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -55,12 +58,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
+public class BaoHiemFragment extends Fragment implements IRequestHttpCallback {
 
-    ArrayList<NhanVien> lstNhanVien;
-    NhanVien nhanVien;
+    ArrayList<BaoHiem> lstBaoHiem;
+    BaoHiem baoHiem;
     IRequestHttpCallback iRequestHttpCallback;
-    Adapter_NhanVien adapter;
+    Adapter_BaoHiem adapter;
     private Unbinder unbinder;
     @BindView(R.id.recycleView)
     RecyclerView recycleView;
@@ -73,7 +76,7 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
     FloatingActionMenu fab_menu;
 
     String StrMaNV = "", strTuNgay = "", strDenNgay = "";
-    Integer option = 1;
+    Integer option = 5;
 //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
 
@@ -82,17 +85,17 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        MainActivity.SetTileActionBar("Nhân Viên");
+        MainActivity.SetTileActionBar("Bảo Hiểm");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.SetTileActionBar("Nhân Viên");
+        MainActivity.SetTileActionBar("Bảo Hiểm");
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_nhanvien, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_baohiem, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         iRequestHttpCallback = this;
         mContext = getActivity();
@@ -103,8 +106,7 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         LoadData();
-        recycleView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
-                recycleView, new ClickListener() {
+        recycleView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
 //                nhanVien = lstNhanVien.get(position);
@@ -114,7 +116,8 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
 
             @Override
             public void onLongClick(View view, int position) {
-
+                BaoHiem baoHiem = (BaoHiem) lstBaoHiem.get(position);
+                Delete_BaoHiem(baoHiem, position);
             }
         }));
 
@@ -174,7 +177,7 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            if(resultCode ==101){
+            if (resultCode == 101) {
                 StrMaNV = data.getStringExtra("result");
                 if (StrMaNV.isEmpty()) {
                     fab_menu.close(false);
@@ -189,17 +192,40 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
     }
 
     public void LoadData() {
-//        shimmerFrameLayout.setVisibility(View.VISIBLE);
-//        shimmerFrameLayout.startShimmer();
-        String url = Modules1.BASE_URL + "load_nhanvien_android";
-        String TAG = "LOAD_NHANVIEN";
+        String url = Modules1.BASE_URL + "load_baohiem";
+        String TAG = "LOAD_BAOHIEM";
 
         AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
         request.params.put("option", option);
-        request.params.put("manv", StrMaNV);
         request.params.put("tungay", strTuNgay);
         request.params.put("denngay", strDenNgay);
+        request.params.put("manv", StrMaNV);
         request.execute();
+    }
+
+    private void Delete_BaoHiem(final BaoHiem baoHiem, final int position) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
+                .setTitle("Xác Nhận")
+                .setIcon(R.drawable.message_icon)
+                .setMessage("Bạn có muốn xóa thông tin bảo hiểm của nhân viên (" + baoHiem.getTennv() + ") này không?")
+
+                .setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String manv = String.valueOf(baoHiem.getManv2());
+                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_baohiem", iRequestHttpCallback, "DELETE_BAOHIEM");
+                        request.params.put("manv", manv);
+                        request.extraData.put("position", position);
+                        request.execute();
+                    }
+                })
+                .setPositiveButton("Bỏ Qua", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setCancelable(false);
+        builder.create().show();
     }
 
 
@@ -208,30 +234,37 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
         if (isSuccess) {
             JSONObject jsonObject = null;
             switch (TAG) {
-                case "LOAD_NHANVIEN":
+                case "LOAD_BAOHIEM":
                     Gson gson = new Gson();
-                    TypeToken<List<NhanVien>> token = new TypeToken<List<NhanVien>>() {
+                    TypeToken<List<BaoHiem>> token = new TypeToken<List<BaoHiem>>() {
                     };
-                    List<NhanVien> nhanViens = gson.fromJson(responseText, token.getType());
-                    lstNhanVien = new ArrayList<NhanVien>();
-                    lstNhanVien.addAll(nhanViens);
-                    //  adapter = new Adapter_NhanVien(getActivity(), lstNhanVien);
-
-                    adapter = new Adapter_NhanVien(getActivity(), lstNhanVien, recycleView);
-
+                    List<BaoHiem> baoHiems = gson.fromJson(responseText, token.getType());
+                    lstBaoHiem = new ArrayList<BaoHiem>();
+                    lstBaoHiem.addAll(baoHiems);
+                    adapter = new Adapter_BaoHiem(getActivity(), lstBaoHiem);
+                    //adapter = new Adapter_BaoHiem(getActivity(), lstBaoHiem, recycleView);
                     recycleView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
                     recycleView.setAdapter(adapter);
-
                     //Làm mới dữ liệu
                     swiperefresh.setRefreshing(false);
+                    break;
+                case "DELETE_BAOHIEM":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        int position = Integer.parseInt(extraData.get("position").toString());
+                        String status = jsonObject.getString("status");
+                        if (status.equals("OK")) {
+                            MDToast.makeText(getActivity(), "Đã xóa thành công thông tin bảo hiểm của nhân viên (" + lstBaoHiem.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                            lstBaoHiem.remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
 
-//                    shimmerFrameLayout.setVisibility(View.GONE);
-//                    shimmerFrameLayout.stopShimmer();
+                    } catch (JSONException e) {
+                        MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
+                    }
                     break;
             }
         } else {
-//            shimmerFrameLayout.setVisibility(View.GONE);
-//            shimmerFrameLayout.stopShimmer();
             MDToast.makeText(getActivity(), "Kết nối với máy chủ thất bại.", Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
         }
     }
@@ -243,13 +276,9 @@ public class NhanVienFragment extends Fragment implements IRequestHttpCallback {
         menuInflater.inflate(R.menu.menu_search_item, menu);
         menuInflater.inflate(R.menu.main, menu);
 
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView =
-                (SearchView) menu.findItem(R.id.menuSearch).getActionView();
-        //searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setQueryHint("Tìm kiếm...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

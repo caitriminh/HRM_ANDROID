@@ -25,6 +25,8 @@ import com.example.myapplication.Model.NghiPhep;
 import com.example.myapplication.Model.VeSom;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
+import com.example.myapplication.ui.CongTac.CongTac_Activity;
+import com.example.myapplication.ui.VeSom.VeSom_Activity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.squareup.picasso.MemoryPolicy;
@@ -124,16 +126,19 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                         CongTac congTac = (CongTac) data.get(position);
                         switch (menuItem.getItemId()) {
                             case R.id.menu_xacnhan:
-                                if(congTac.getStatus_nhansu().equals("YES")|| congTac.getStatus_nhansu().equals("NO")){
+                                if (congTac.getStatus_nhansu().equals("YES") || congTac.getStatus_nhansu().equals("NO")) {
                                     MDToast.makeText(mContext, "Đăng ký đi công tác của nhân viên (" + congTac.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                                }
-                                else{
+                                } else {
                                     XacNhan_CongTac(congTac, position);
                                 }
-
                                 break;
                             case R.id.menu_pheduyet:
                                 PheDuyet_CongTac(congTac, position);
+                                break;
+                            case R.id.menu_ct_congtac:
+                                Modules1.strMaNV = data.get(position).getManv2();
+                                Intent intent_congtac = new Intent(mContext, CongTac_Activity.class);
+                                mContext.startActivity(intent_congtac);
                                 break;
                             case R.id.menu_xemanh:
                                 congTac = data.get(position);
@@ -142,7 +147,6 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                                 break;
                         }
                         return false;
-
                     }
 
                 });

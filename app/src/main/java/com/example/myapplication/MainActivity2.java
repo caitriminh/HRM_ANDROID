@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
-import com.example.myapplication.NhanVien.Fragment_Main_Nhanvien;
+
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ public class MainActivity2 extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        Fragment fragment = new Fragment_Main_Nhanvien();
-        open_fragment(fragment);
+//        Fragment fragment = new Fragment_Main_Nhanvien();
+//        open_fragment(fragment);
     }
 
     public void open_fragment(Fragment fragment) {

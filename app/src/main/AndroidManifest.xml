@@ -26,6 +26,9 @@
         <activity android:name=".ui.LenhTangCa.NhanVienTangCa_MaLenh_Activity" />
         <activity android:name=".ui.PhuLucHopDong.PhuLucHopDong_Activity" />
         <activity android:name=".ui.PhepNam.CTPhepNam_Activity" />
+        <activity android:name=".ui.CongTac.CongTac_Activity" />
+        <activity android:name=".ui.VeSom.VeSom_Activity" />
+        <activity android:name=".ui.CheDoBaoHiem.CheDoBaoHiem_Activity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

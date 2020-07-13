@@ -8,6 +8,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.myapplication.ui.BaoHiem.BaoHiemFragment;
 import com.example.myapplication.ui.CongTac.CongTacFragment;
 import com.example.myapplication.ui.HopDongLaoDong.HopDongLaoDongFragment;
 import com.example.myapplication.ui.LenhTangCa.LenhTangCaFragment;
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_lenhtangca:
                         LenhTangCaFragment frmLenhTangCa = new LenhTangCaFragment();
                         open_fragment(frmLenhTangCa);
+                        break;
+                    case R.id.nav_baohiem:
+                        BaoHiemFragment frmBaoHiem = new BaoHiemFragment();
+                        open_fragment(frmBaoHiem);
                         break;
 //                    case R.id.nav_logout:
 //                        SharedPreferences pref = getSharedPreferences("SESSION", MODE_PRIVATE);

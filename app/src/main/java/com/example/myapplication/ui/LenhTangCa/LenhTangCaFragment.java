@@ -1,17 +1,24 @@
 package com.example.myapplication.ui.LenhTangCa;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +36,11 @@ import com.example.myapplication.Interface.ClickListener;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.Model.LenhTangCa;
+import com.example.myapplication.Model.LoaiNghiPhep;
+import com.example.myapplication.Model.LoaiTangCa;
 import com.example.myapplication.Model.NhanVienTangCa;
+import com.example.myapplication.Model.NhomMay;
+import com.example.myapplication.Model.PhanXuong;
 import com.example.myapplication.Model.VeSom;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
@@ -41,6 +52,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ornach.nobobutton.NoboButton;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -61,7 +73,13 @@ import butterknife.Unbinder;
 public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback {
 
     ArrayList<LenhTangCa> lstLenhTangCa;
+    ArrayList<LoaiTangCa> lstLoaiTangCa;
+    ArrayList<PhanXuong> lstPhanXuong;
+    ArrayList<NhomMay> lstNhomMay;
     LenhTangCa lenhTangCa;
+    LoaiTangCa loaiTangCa;
+    PhanXuong phanXuong;
+    NhomMay nhomMay;
     IRequestHttpCallback iRequestHttpCallback;
     Adapter_LenhTangCa adapter;
     private Unbinder unbinder;
@@ -71,11 +89,13 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
     @BindView(R.id.swiperefresh)
     SwipeRefreshLayout swiperefresh;
     Context mContext;
-//    @BindView(R.id.shimmer_view_container)
+    //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
-
-    String strTuNgay="", strDenNgay="";
-    Integer option=1;
+    TextView txtMaLenh, txtNgayTangCa, txtPhanXuong, txtLoaiTangCa, txtNhomCongViec;
+    EditText txtGhiChu;
+    String strTuNgay = "", strDenNgay = "", strNgayTangCa = "", strMaLoaiTangCa = "", strMaPX = "", strMaNhom = "", strMaLenh = "";
+    Integer option = 1;
+    NoboButton btnLuu, btnDong;
 
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
@@ -96,7 +116,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_lenhtangca, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        mContext=getActivity();
+        mContext = getActivity();
         iRequestHttpCallback = this;
         return rootView;
     }
@@ -109,7 +129,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                 recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Modules1.objLenhTangCa =lstLenhTangCa.get(position);
+                Modules1.objLenhTangCa = lstLenhTangCa.get(position);
                 Intent intent_nghiphep = new Intent(mContext, NhanVienTangCa_MaLenh_Activity.class);
                 mContext.startActivity(intent_nghiphep);
             }
@@ -136,7 +156,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                 .setIcon(R.drawable.message_icon)
                 .setMessage("Bạn có muốn xóa lệnh tăng ca (" + lenhTangCa.getMalenh() + ") này không?")
 
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String malenh = String.valueOf(lenhTangCa.getMalenh());
@@ -146,7 +166,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                         request.execute();
                     }
                 })
-                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Bỏ Qua", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -163,6 +183,251 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
         request.params.put("option", option);
         request.params.put("tungay", strTuNgay);
         request.params.put("denngay", strDenNgay);
+        request.execute();
+    }
+
+    public void AddLenhTangCa() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.layout_diaglog_add_lenhtangca, null);
+        txtMaLenh = view.findViewById(R.id.txtMaLenh);
+        txtNgayTangCa = view.findViewById(R.id.txtNgayTangCa);
+        txtGhiChu = view.findViewById(R.id.txtGhiChu);
+        txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
+        txtLoaiTangCa = view.findViewById(R.id.txtLoaiTangCa);
+        txtNhomCongViec = view.findViewById(R.id.txtNhomCongViec);
+
+
+        btnLuu = view.findViewById(R.id.btnLuu);
+        btnDong = view.findViewById(R.id.btnDong);
+
+        txtMaLenh.setText("Lệnh tăng ca: " + strMaLenh);
+
+        builder.setView(view)
+                .setTitle("Thêm Lệnh Tăng Ca")
+                .setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        ShowLoaiTangCa(txtLoaiTangCa);
+        ShowPhanXuong(txtPhanXuong);
+        ShowNhomMay(txtNhomCongViec);
+
+        //Thêm ngày nhập
+        txtNgayTangCa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                                calendar.set(year, month, day);
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                String strDate = formatter.format(calendar.getTime());
+
+                                txtNgayTangCa.setText("Ngày tăng ca: " + strDate);
+                                //Lấy giá trị gửi lên server
+                                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
+                                strNgayTangCa = formatter2.format(calendar.getTime());
+
+                            }
+                        }, year, month, dayOfMonth);
+
+                datePickerDialog.show();
+            }
+        });
+
+
+        btnLuu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (txtMaLenh.getText().equals("")) {
+                    MDToast.makeText(getActivity(), "Vui lòng nhập vào mã lệnh tăng ca.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (txtLoaiTangCa.getText().equals("")) {
+                    MDToast.makeText(getActivity(), "Bạn vui lòng chọn loại tăng ca", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (strNgayTangCa.equals("")) {
+                    MDToast.makeText(getActivity(), "Bạn vui lòng nhập vào ngày tăng ca", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (txtPhanXuong.getText().toString().equals("")) {
+                    MDToast.makeText(getActivity(), "Bạn vui lòng chọn phân xưởng cần tăng ca", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (txtNhomCongViec.getText().toString().equals("")) {
+                    MDToast.makeText(getActivity(), "Bạn vui lòng chọn nhóm công việc cần tăng ca", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                String url = Modules1.BASE_URL + "insert_lenhtangca";
+                String TAG = "INSERT_LENHTANGCA";
+                AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+                //Gửi user va Pass len server
+                request.params.put("malenh", strMaLenh);
+                request.params.put("matangca", strMaLoaiTangCa);
+                request.params.put("ngaytangca", strNgayTangCa);
+                request.params.put("mapx", strMaPX);
+                request.params.put("manhom", strMaNhom);
+                request.params.put("ghichu", txtGhiChu.getText().toString());
+                request.params.put("nguoitd", Modules1.tendangnhap);
+                request.extraData.put("malenh", strMaLenh);
+                request.execute();
+
+//                dialog.setCancelable(true);
+//                dialog.dismiss();
+
+                txtNhomCongViec.setText(" Chọn nhóm công việc: ");
+                txtGhiChu.setText("");
+            }
+        });
+
+
+        btnDong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.setCancelable(true);
+                dialog.dismiss();
+                fab_menu.close(false);
+            }
+        });
+
+    }
+
+    @OnClick(R.id.btnThem)
+    public void ThemLenhTangCa() {
+        LoadMaLenh();
+        //  AddLenhTangCa();
+        LoadLoaiTangCa();
+        LoadPhanXuong();
+        LoadNhomMay();
+
+    }
+
+    public void ShowNhomMay(TextView txtNhomCongViec) {
+        txtNhomCongViec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Chọn nhóm công việc");
+                builder.setCancelable(false);
+                String[] arrayNhomMay = new String[lstNhomMay.size()];
+                int i = 0;
+                for (NhomMay nhomMay : lstNhomMay) {
+                    arrayNhomMay[i] = nhomMay.getNhommay();
+                    i++;
+                }
+                builder.setSingleChoiceItems(arrayNhomMay, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        NhomMay nhomMay = lstNhomMay.get(i);
+                        txtNhomCongViec.setText("Nhóm công việc: " + nhomMay.getNhommay());
+                        strMaNhom = nhomMay.getManhom();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void LoadNhomMay() {
+        String url = Modules1.BASE_URL + "load_nhommay";
+        String TAG = "LOAD_NHOMMAY";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.execute();
+    }
+
+    public void ShowPhanXuong(TextView txtPhanXuong) {
+        txtPhanXuong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Chọn phân xưởng");
+                builder.setCancelable(false);
+                String[] arrayPhanXuong = new String[lstPhanXuong.size()];
+                int i = 0;
+                for (PhanXuong phanXuong : lstPhanXuong) {
+                    arrayPhanXuong[i] = phanXuong.getTenpx();
+                    i++;
+                }
+                builder.setSingleChoiceItems(arrayPhanXuong, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        PhanXuong phanXuong = lstPhanXuong.get(i);
+                        txtPhanXuong.setText("Phân xưởng: " + phanXuong.getTenpx());
+                        strMaPX = phanXuong.getMapx();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void LoadPhanXuong() {
+        String url = Modules1.BASE_URL + "load_phanxuong";
+        String TAG = "LOAD_PHANXUONG";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.execute();
+    }
+
+    public void ShowLoaiTangCa(TextView txtLoaiTangCa) {
+        txtLoaiTangCa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Chọn loại tăng ca");
+                builder.setCancelable(false);
+                String[] arrayLoaiTangCa = new String[lstLoaiTangCa.size()];
+                int i = 0;
+                for (LoaiTangCa loaiTangCa : lstLoaiTangCa) {
+                    arrayLoaiTangCa[i] = loaiTangCa.getLoaitangca();
+                    i++;
+                }
+                builder.setSingleChoiceItems(arrayLoaiTangCa, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        LoaiTangCa loaiTangCa = lstLoaiTangCa.get(i);
+                        txtLoaiTangCa.setText("Loại tăng ca: " + loaiTangCa.getLoaitangca());
+                        strMaLoaiTangCa = loaiTangCa.getMatangca();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void LoadLoaiTangCa() {
+        String url = Modules1.BASE_URL + "load_loaitangca";
+        String TAG = "LOAD_LOAITANGCA";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+
+        request.execute();
+    }
+
+    public void LoadMaLenh() {
+        String url = Modules1.BASE_URL + "getMalenhTangCa";
+        String TAG = "TAOMALENH";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
         request.execute();
     }
 
@@ -238,6 +503,44 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                         MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
                     }
                     break;
+                case "INSERT_LENHTANGCA":
+                    LoadData();
+                    break;
+                case "LOAD_LOAITANGCA":
+                    Gson gsonLoaiTangCa = new Gson();
+                    TypeToken<List<LoaiTangCa>> tokenLoaiTangCa = new TypeToken<List<LoaiTangCa>>() {
+                    };
+                    List<LoaiTangCa> loaiTangCas = gsonLoaiTangCa.fromJson(responseText, tokenLoaiTangCa.getType());
+                    lstLoaiTangCa = new ArrayList<LoaiTangCa>();
+                    lstLoaiTangCa.addAll(loaiTangCas);
+                    break;
+                case "LOAD_PHANXUONG":
+                    Gson gsonPhanXuong = new Gson();
+                    TypeToken<List<PhanXuong>> tokenPhanXuong = new TypeToken<List<PhanXuong>>() {
+                    };
+                    List<PhanXuong> phanXuongs = gsonPhanXuong.fromJson(responseText, tokenPhanXuong.getType());
+                    lstPhanXuong = new ArrayList<PhanXuong>();
+                    lstPhanXuong.addAll(phanXuongs);
+                    break;
+                case "LOAD_NHOMMAY":
+                    Gson gsonNhomMay = new Gson();
+                    TypeToken<List<NhomMay>> tokenNhomMay = new TypeToken<List<NhomMay>>() {
+                    };
+                    List<NhomMay> nhomMays = gsonNhomMay.fromJson(responseText, tokenNhomMay.getType());
+                    lstNhomMay = new ArrayList<NhomMay>();
+                    lstNhomMay.addAll(nhomMays);
+                    break;
+                case "TAOMALENH":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        strMaLenh = jsonObject.getString("malenh");
+                        AddLenhTangCa();
+                    } catch (JSONException e) {
+                        MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
+                    }
+                    break;
+
+
             }
         } else {
             MDToast.makeText(getActivity(), "Kết nối với máy chủ thất bại.", Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();

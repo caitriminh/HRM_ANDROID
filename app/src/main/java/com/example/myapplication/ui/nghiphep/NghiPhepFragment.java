@@ -133,7 +133,12 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
             @Override
             public void onLongClick(View view, int position) {
                 NghiPhep nghiPhep = (NghiPhep) lstNghiPhep.get(position);
-                Delete_NhanVienNghiPhep(nghiPhep, position);
+                if (nghiPhep.getStatus_nhansu().equals("") && nghiPhep.getStatus_quanly().equals("")) {
+                    Delete_NhanVienNghiPhep(nghiPhep, position);
+                } else {
+                    MDToast.makeText(mContext, "Đăng ký nghỉ phép của nhân viên (" + nghiPhep.getTennv() + ") đã được phê duyệt hoặc đã xác nhận.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                }
+
             }
         }));
 

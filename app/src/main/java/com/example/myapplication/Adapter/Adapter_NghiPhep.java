@@ -143,6 +143,11 @@ public class Adapter_NghiPhep extends RecyclerView.Adapter<Adapter_NghiPhep.Recy
                             case R.id.menu_pheduyet:
                                 PheDuyet_NghiPhep(nghiPhep, position);
                                 break;
+                            case R.id.menu_ct_nghiphep:
+                                Modules1.strMaNV = data.get(position).getManv2();
+                                Intent intent_nghiphep = new Intent(mContext, NghiPhep_MaNV_Activity.class);
+                                mContext.startActivity(intent_nghiphep);
+                                break;
                             case R.id.menu_xemanh:
                                 nghiPhep = data.get(position);
                                 String url = nghiPhep.getHinh();

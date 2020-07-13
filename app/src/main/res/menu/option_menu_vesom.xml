@@ -15,9 +15,9 @@
         android:title="2. Phê duyệt" />
 
     <item
-        android:id="@+id/menu_ct_nghiphep"
+        android:id="@+id/menu_ct_vesom"
         android:icon="@drawable/ic_ct_nghiphep"
-        android:title="3. Chi tiết về sớm" />
+        android:title="3. Nhật ký về sớm" />
 
     <item
         android:id="@+id/menu_xemanh"

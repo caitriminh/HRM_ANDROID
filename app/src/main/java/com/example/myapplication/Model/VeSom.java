@@ -12,6 +12,12 @@ public class VeSom {
     @SerializedName("manv")
     @Expose
     private String manv;
+
+    @SerializedName("manv2")
+    @Expose
+    private String manv2;
+
+
     @SerializedName("tennv")
     @Expose
     private String tennv;
@@ -51,6 +57,11 @@ public class VeSom {
     @Expose
     private String status_nhansu;
 
+    @SerializedName("giora")
+    @Expose
+    private String giora;
+
+
     public Integer getId() {
         return id;
     }
@@ -65,6 +76,14 @@ public class VeSom {
 
     public void setManv(String manv) {
         this.manv = manv;
+    }
+
+    public String getManv2() {
+        return manv2;
+    }
+
+    public void setManv2(String manv2) {
+        this.manv2 = manv2;
     }
 
     public String getTennv() {
@@ -161,6 +180,14 @@ public class VeSom {
 
     public void setStatus_nhansu(String status_nhansu) {
         this.status_nhansu = status_nhansu;
+    }
+
+    public String getGiora() {
+        return giora;
+    }
+
+    public void setGiora(String giora) {
+        this.giora = giora;
     }
 
 }

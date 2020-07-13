@@ -133,7 +133,11 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
             @Override
             public void onLongClick(View view, int position) {
                 CongTac congTac = (CongTac) lstCongTac.get(position);
-                Delete_NhanVienCongTac(congTac, position);
+                if (congTac.getStatus_nhansu().equals("") && congTac.getStatus_quanly().equals("")) {
+                    Delete_NhanVienCongTac(congTac, position);
+                } else {
+                    MDToast.makeText(mContext, "Phiếu đi công tác của nhân viên (" + congTac.getTennv() + ") đã phê duyệt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                }
             }
         }));
 

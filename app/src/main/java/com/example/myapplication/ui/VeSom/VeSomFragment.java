@@ -52,6 +52,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -89,8 +90,8 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     SwipeRefreshLayout swiperefresh;
     Context mContext;
 
-    String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay="", StrDenNgay="", StrMaNV="";
-    Integer mMinute = 0, mHour = 0, option=1;
+    String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
+    Integer mMinute = 0, mHour = 0, option = 1;
 
     TextView txtHoTen, txtPhanXuong, txtNgayDangKy, txtLoaiNghiPhep, txtGioRa, txtGioVao;
     EditText txtMaNV, txtGhiChu;
@@ -103,7 +104,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mContext=getActivity();
+        mContext = getActivity();
         MainActivity.SetTileActionBar("Đăng Ký Về Sớm");
     }
 
@@ -136,7 +137,11 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
             @Override
             public void onLongClick(View view, int position) {
                 VeSom veSom = (VeSom) lstVesom.get(position);
-                Delete_NhanVienVeSom(veSom, position);
+                if (veSom.getStatus_nhansu().equals("") && veSom.getStatus_quanly().equals("")) {
+                    Delete_NhanVienVeSom(veSom, position);
+                } else {
+                    MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyệt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                }
             }
         }));
 
@@ -148,6 +153,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
             }
         });
     }
+
 
     public void LoadData() {
         String url = Modules1.BASE_URL + "load_vesom";
@@ -168,7 +174,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     }
 
     @OnClick(R.id.btnQR)
-    public void ScanQR(){
+    public void ScanQR() {
         Intent intent = new Intent(mContext, ScanQR_Activity.class);
         startActivityForResult(intent, 100);
     }
@@ -177,9 +183,9 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            StrMaNV =  data.getStringExtra("result");
+            StrMaNV = data.getStringExtra("result");
             //MDToast.makeText(mContext, StrMaNV, Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-            option=3;
+            option = 3;
             LoadData();
             fab_menu.close(false);
         }
@@ -291,7 +297,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         txtGioRa.setText("Giờ ra: " + hourOfDay + ":" + minute);
-                        StrGioRa=hourOfDay + ":" + minute;
+                        StrGioRa = hourOfDay + ":" + minute;
                     }
                 }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -310,7 +316,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         txtGioVao.setText("Giờ vào: " + hourOfDay + ":" + minute);
-                        StrGioVao=hourOfDay + ":" + minute;
+                        StrGioVao = hourOfDay + ":" + minute;
                     }
                 }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -414,29 +420,36 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
         request.execute();
     }
 
-    private void Delete_NhanVienVeSom(final VeSom veSom, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
-                .setMessage("Bạn có muốn xóa phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?")
 
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+
+    private void Delete_NhanVienVeSom(final VeSom veSom, final int position) {
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(getActivity())
+                .setTitle("Xác Nhận?")
+                .setMessage("Bạn có muốn xóa phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?")
+                .setCancelable(false)
+                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                         String id = String.valueOf(veSom.getId());
                         AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_VESOM");
                         request.params.put("id", id);
                         request.extraData.put("position", position);
                         request.execute();
+
+                        dialogInterface.dismiss();
                     }
+
                 })
-                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Bỏ Qua", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+//                        Toast.makeText(mContext, "Cancelled!", Toast.LENGTH_SHORT).show();
+                        dialogInterface.dismiss();
                     }
+
                 })
-                .setCancelable(false);
-        builder.create().show();
+                .build();
+        mBottomSheetDialog.show();
     }
 
     @Override

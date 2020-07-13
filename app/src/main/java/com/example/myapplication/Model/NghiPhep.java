@@ -11,6 +11,11 @@ public class NghiPhep {
     @SerializedName("manv")
     @Expose
     private String manv;
+
+    @SerializedName("manv2")
+    @Expose
+    private String manv2;
+
     @SerializedName("tennv")
     @Expose
     private String tennv;
@@ -63,6 +68,10 @@ public class NghiPhep {
     @Expose
     private String status_nhansu;
 
+    @SerializedName("tongso")
+    @Expose
+    private String tongso;
+
     public Integer getId() {
         return id;
     }
@@ -77,6 +86,14 @@ public class NghiPhep {
 
     public void setManv(String manv) {
         this.manv = manv;
+    }
+
+    public String getManv2() {
+        return manv2;
+    }
+
+    public void setManv2(String manv2) {
+        this.manv2 = manv2;
     }
 
     public String getTennv() {
@@ -197,6 +214,14 @@ public class NghiPhep {
 
     public void setStatus_nhansu(String status_nhansu) {
         this.status_nhansu = status_nhansu;
+    }
+
+    public String getTongso() {
+        return tongso;
+    }
+
+    public void setTongso(String tongso) {
+        this.tongso = tongso;
     }
 
 
