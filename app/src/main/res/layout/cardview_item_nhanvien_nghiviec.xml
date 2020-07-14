@@ -36,13 +36,13 @@
             android:layout_weight="0.7"
             android:orientation="vertical"
             android:paddingLeft="8dp"
-            android:weightSum="8">
+            android:weightSum="8.8">
 
             <TextView
                 android:id="@+id/txtMaNV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Mã nhân viên: 002597"
                 android:textStyle="bold"></TextView>
 
@@ -59,7 +59,7 @@
                 android:id="@+id/txtNgaySinh"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Ngày sinh: 13/03/1987"
                ></TextView>
 
@@ -67,7 +67,7 @@
                 android:id="@+id/txtNgayNghi"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Ngày nghỉ: 25/07/2020"
                 ></TextView>
 
@@ -75,7 +75,7 @@
                 android:id="@+id/txtPhanXuong"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Phân xưởng: BP. ERP"
                 android:textStyle="bold"></TextView>
 
@@ -83,7 +83,7 @@
                 android:id="@+id/txtChuyen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Mã nhân viên: 002597"
                 android:textStyle="bold"></TextView>
 
@@ -91,7 +91,7 @@
                 android:id="@+id/txtTo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Mã nhân viên: 002597"
                 android:textStyle="bold"></TextView>
 
@@ -99,7 +99,7 @@
                 android:id="@+id/txtLyDo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Lý do: Việc riêng"
                 android:textStyle="bold"></TextView>
 

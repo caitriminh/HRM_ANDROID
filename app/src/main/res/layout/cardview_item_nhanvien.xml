@@ -36,13 +36,13 @@
             android:layout_weight="0.7"
             android:orientation="vertical"
             android:paddingLeft="8dp"
-            android:weightSum="8">
+            android:weightSum="8.8">
 
             <TextView
                 android:id="@+id/txtMaNV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Mã nhân viên: 002597"
                 android:textStyle="bold"></TextView>
 
@@ -50,14 +50,14 @@
                 android:id="@+id/txtHoTen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="CÁI TRÍ MINH"
                 android:textStyle="bold"></TextView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:orientation="horizontal"
                 android:weightSum="1">
                 >
@@ -79,7 +79,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:weightSum="1"
                 android:orientation="horizontal"
                                 >
@@ -104,7 +104,7 @@
                 android:id="@+id/txtDiaChi"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:ellipsize="end"
                 android:gravity="left"
                 android:maxLines="1"
@@ -116,7 +116,7 @@
                 android:id="@+id/txtPhanXuong"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="BP. ERP"
                 android:textStyle="bold"></TextView>
 
@@ -131,7 +131,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -151,7 +151,7 @@
                     android:gravity="center|right"
                     android:paddingRight="8dp"
                     android:text="&#8942;"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:textStyle="bold"></TextView>
             </LinearLayout>
         </LinearLayout>

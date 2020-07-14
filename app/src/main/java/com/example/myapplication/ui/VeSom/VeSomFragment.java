@@ -129,19 +129,12 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                 recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-//                nhatKyTop50 = lstNhatKy.get(position);
-//                String url = nhatKyTop50.getHinhanh2();
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                VeSom veSom = (VeSom) lstVesom.get(position);
-                if (veSom.getStatus_nhansu().equals("") && veSom.getStatus_quanly().equals("")) {
-                    Delete_NhanVienVeSom(veSom, position);
-                } else {
-                    MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyệt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                }
+
             }
         }));
 
@@ -420,38 +413,6 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
         request.execute();
     }
 
-
-
-    private void Delete_NhanVienVeSom(final VeSom veSom, final int position) {
-        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(getActivity())
-                .setTitle("Xác Nhận?")
-                .setMessage("Bạn có muốn xóa phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?")
-                .setCancelable(false)
-                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
-                    @Override
-                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
-                        String id = String.valueOf(veSom.getId());
-                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_VESOM");
-                        request.params.put("id", id);
-                        request.extraData.put("position", position);
-                        request.execute();
-
-                        dialogInterface.dismiss();
-                    }
-
-                })
-                .setNegativeButton("Bỏ Qua", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
-                    @Override
-                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
-//                        Toast.makeText(mContext, "Cancelled!", Toast.LENGTH_SHORT).show();
-                        dialogInterface.dismiss();
-                    }
-
-                })
-                .build();
-        mBottomSheetDialog.show();
-    }
-
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
@@ -493,22 +454,6 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                     lstLoaiNghiPhep.addAll(donVis);
                     break;
 
-                case "DELETE_NHANVIEN_VESOM":
-                    try {
-                        jsonObject = new JSONObject(responseText);
-                        int position = Integer.parseInt(extraData.get("position").toString());
-                        String status = jsonObject.getString("status");
-                        if (status.equals("OK")) {
-                            MDToast.makeText(getActivity(), "Đã xóa thành công đăng ký về sớm của nhân viên (" + lstVesom.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                            lstVesom.remove(position);
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            MDToast.makeText(getActivity(), "Phiếu đăng ký đi về sớm của nhân viên (" + lstVesom.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                        }
-                    } catch (JSONException e) {
-                        MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
-                    }
-                    break;
                 case "LOAD_THONGTIN":
                     try {
                         jsonObject = new JSONObject(responseText);

@@ -125,19 +125,11 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
                 recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-//                nhatKyTop50 = lstNhatKy.get(position);
-//                String url = nhatKyTop50.getHinhanh2();
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                NghiPhep nghiPhep = (NghiPhep) lstNghiPhep.get(position);
-                if (nghiPhep.getStatus_nhansu().equals("") && nghiPhep.getStatus_quanly().equals("")) {
-                    Delete_NhanVienNghiPhep(nghiPhep, position);
-                } else {
-                    MDToast.makeText(mContext, "Đăng ký nghỉ phép của nhân viên (" + nghiPhep.getTennv() + ") đã được phê duyệt hoặc đã xác nhận.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                }
 
             }
         }));
@@ -427,31 +419,6 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
         request.execute();
     }
 
-    private void Delete_NhanVienNghiPhep(final NghiPhep nghiPhep, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
-                .setMessage("Bạn có muốn xóa phiếu đăng ký nghỉ phép của nhân viên (" + nghiPhep.getTennv() + ") này không?")
-
-                .setNegativeButton("XÓA", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String id = String.valueOf(nghiPhep.getId());
-                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_NGHIPHEP");
-                        request.params.put("id", id);
-                        request.extraData.put("position", position);
-                        request.execute();
-                    }
-                })
-                .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setCancelable(false);
-        builder.create().show();
-    }
-
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
@@ -494,22 +461,7 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
                     }
                     break;
 
-                case "DELETE_NHANVIEN_NGHIPHEP":
-                    try {
-                        jsonObject = new JSONObject(responseText);
-                        int position = Integer.parseInt(extraData.get("position").toString());
-                        String status = jsonObject.getString("status");
-                        if (status.equals("OK")) {
-                            MDToast.makeText(getActivity(), "Đã xóa thành công đăng ký nghỉ phép của nhân viên (" + lstNghiPhep.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                            lstNghiPhep.remove(position);
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            MDToast.makeText(getActivity(), "Phiếu đăng ký nghỉ phép của nhân viên (" + lstNghiPhep.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                        }
-                    } catch (JSONException e) {
-                        MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
-                    }
-                    break;
+
                 case "LOAD_THONGTIN":
                     try {
                         jsonObject = new JSONObject(responseText);

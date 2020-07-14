@@ -1,7 +1,6 @@
-package com.example.myapplication.ui.PhepNam;
+package com.example.myapplication.ui.HopDongLaoDong;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,25 +10,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.myapplication.Adapter.Adapter_CTPhepNam;
-import com.example.myapplication.Adapter.Adapter_NhanVienTangCa_MaLenh;
 import com.example.myapplication.AsyncPostHttpRequest;
 import com.example.myapplication.Interface.ClickListener;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.Model.CTPhepNam;
-import com.example.myapplication.Model.NhanVienTangCa;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.valdesekamdem.library.mdtoast.MDToast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class CTPhepNam_Activity extends AppCompatActivity implements IRequestHttpCallback {
+public class CTHopDong_Activity extends AppCompatActivity implements IRequestHttpCallback {
 
     IRequestHttpCallback iRequestHttpCallback;
     ArrayList<CTPhepNam> lstCTPhepNam;

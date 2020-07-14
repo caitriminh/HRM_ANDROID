@@ -1,5 +1,6 @@
 package com.example.myapplication.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import com.example.myapplication.ui.VeSom.VeSom_Activity;
 import com.example.myapplication.ui.nghiphep.NghiPhep_MaNV_Activity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
@@ -41,6 +43,9 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -62,7 +67,7 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
     VeSom veSom;
     private Unbinder unbinder;
     PowerMenu powerMenu;
-    Integer option = 1, position_item=-1;
+    Integer option = 1, position_item = -1;
 
     public Adapter_VeSom(Context mContext, List<VeSom> data) {
         this.data = data;
@@ -126,13 +131,14 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
 
             @Override
             public void onClick(View view) {
-                position_item=position;
+                position_item = position;
                 powerMenu = new PowerMenu.Builder(mContext)
                         // .setHeaderView(R.layout.layout_dialog_header)
-                        .addItem(new PowerMenuItem("Xác nhận", R.drawable.ic_baseline_security_24)) // add an item.
-                        .addItem(new PowerMenuItem("Phê duyệt", R.drawable.ic_menu_pheduyet)) // aad an item list.
-                        .addItem(new PowerMenuItem("Nhật ký về sớm", R.drawable.ic_ct_nghiphep)) // aad an item list.
-                        .addItem(new PowerMenuItem("Xem ảnh", R.drawable.ic_menu_xemanh)) // aad an item list.
+                        .addItem(new PowerMenuItem("Xác nhận", R.drawable.ic_baseline_security_24, "XACNHAN")) // add an item.
+                        .addItem(new PowerMenuItem("Phê duyệt", R.drawable.ic_menu_pheduyet, "PHEDUYET")) // aad an item list.
+                        .addItem(new PowerMenuItem("Nhật ký về sớm", R.drawable.ic_ct_nghiphep, "NHATKY")) // aad an item list.
+                        .addItem(new PowerMenuItem("Xem ảnh", R.drawable.ic_menu_xemanh, "XEMANH")) // aad an item list.
+                        .addItem(new PowerMenuItem("Xóa", R.drawable.ic_delete, "XOA")) // aad an item list.
                         .setAnimation(MenuAnimation.ELASTIC_CENTER)
                         .setWidth(600)
                         .setDivider(new ColorDrawable(ContextCompat.getColor(mContext, R.color.bluegrey200))) // sets a divider.
@@ -141,7 +147,7 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
                         .setMenuShadow(10f) // sets the shadow.
                         .setTextColor(ContextCompat.getColor(mContext, R.color.grey700))
                         .setTextGravity(Gravity.LEFT)
-                               .setTextSize(16)
+                        .setTextSize(16)
                         .setSelectedTextColor(Color.WHITE)
                         .setMenuColor(Color.WHITE)
                         .setSelectedMenuColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
@@ -149,7 +155,6 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
                         .build();
                 //powerMenu.showAsAnchorCenter(view.getRootView(), 0, 0);
                 powerMenu.showAsAnchorCenter(view, 0, 0);
-
             }
         });
     }
@@ -158,47 +163,68 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
         @Override
         public void onItemClick(int position, PowerMenuItem item) {
             VeSom veSom = data.get(position_item);
-            if (position == 0) {
-                if (veSom.getStatus_nhansu().equals("YES") || veSom.getStatus_nhansu().equals("NO")) {
-                    MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                } else {
-                    XacNhan_VeSom(veSom, position_item);
-                }
-            } else if (position == 1) {
-                PheDuyet_VeSom(veSom, position_item);
-            } else if (position == 2) {
-                Modules1.strMaNV = data.get(position_item).getManv2();
-                Intent intent_vesom = new Intent(mContext, VeSom_Activity.class);
-                mContext.startActivity(intent_vesom);
-            } else if (position == 3) {
-                veSom = data.get(position_item);
-                String url = veSom.getHinh();
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            String TAG = item.getTag().toString();
+            switch (TAG) {
+                case "XACNHAN":
+                    if (veSom.getStatus_nhansu().equals("YES") || veSom.getStatus_nhansu().equals("NO")) {
+                        MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    } else {
+                        XacNhan_VeSom(veSom, position_item);
+                    }
+                    break;
+                case "PHEDUYET":
+                    PheDuyet_VeSom(veSom, position_item);
+                    break;
+                case "NHATKY":
+                    Modules1.strMaNV = data.get(position_item).getManv2();
+                    Intent intent_vesom = new Intent(mContext, VeSom_Activity.class);
+                    mContext.startActivity(intent_vesom);
+                    break;
+                case "XEMANH":
+                    veSom = data.get(position_item);
+                    String url = veSom.getHinh();
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    break;
+                case "XOA":
+                    if (veSom.getStatus_nhansu().equals("") && veSom.getStatus_quanly().equals("")) {
+                        Delete_NhanVienVeSom(veSom, position_item);
+                    } else {
+                        MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyệt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    }
+                    break;
             }
             powerMenu.dismiss();
         }
     };
 
-    //Set icon menu popup
-//    public static void setForceShowIcon(PopupMenu popupMenu) {
-////        try {
-////            Field[] fields = popupMenu.getClass().getDeclaredFields();
-////            for (Field field : fields) {
-////                if ("mPopup".equals(field.getName())) {
-////                    field.setAccessible(true);
-////                    Object menuPopupHelper = field.get(popupMenu);
-////                    Class<?> classPopupHelper = Class.forName(menuPopupHelper
-////                            .getClass().getName());
-////                    Method setForceIcons = classPopupHelper.getMethod(
-////                            "setForceShowIcon", boolean.class);
-////                    setForceIcons.invoke(menuPopupHelper, true);
-////                    break;
-////                }
-////            }
-////        } catch (Throwable e) {
-////            e.printStackTrace();
-////        }
-////    }
+    private void Delete_NhanVienVeSom(final VeSom veSom, final int position) {
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                .setTitle("Xác Nhận?")
+                .setMessage("Bạn có muốn xóa phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?")
+                .setCancelable(false)
+                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        String id = String.valueOf(veSom.getId());
+                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_VESOM");
+                        request.params.put("id", id);
+                        request.extraData.put("position", position);
+                        request.execute();
+
+                        dialogInterface.dismiss();
+                    }
+
+                })
+                .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                    }
+
+                })
+                .build();
+        mBottomSheetDialog.show();
+    }
 
     @Override
     public int getItemCount() {
@@ -220,87 +246,77 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
         String title = "";
         if (veSom.getStatus_quanly().equals("")) {
             title = "Bạn có muốn phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Xác Nhận")
+                    .setMessage(title)
+                    .setCancelable(false)
+                    .setPositiveButton("Xác nhận", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            option = 1;
+                            XacNhan(position);
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Không xác nhận", R.drawable.ic_khong_duyet, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            option = 2;
+                            XacNhan(position);
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .build();
+            mBottomSheetDialog.show();
 
         } else if (veSom.getStatus_quanly().equals("YES")) {
             title = "Bạn có muốn thu hồi phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Thu Hồi")
+                    .setMessage(title)
+                    .setCancelable(false)
+                    .setPositiveButton("Thu hồi", R.drawable.ic_thuhoi, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            option = 3;
+                            XacNhan(position);
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .build();
+            mBottomSheetDialog.show();
 
         } else if (veSom.getStatus_quanly().equals("NO")) {
             title = "Bạn có muốn xác nhận phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
-
-        }
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-        if (veSom.getStatus_quanly().equals("")) {
-            builder.setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Xác Nhận")
                     .setMessage(title)
-
-                    .setNegativeButton("PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Xác nhận", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 1;
                             XacNhan(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("KHÔNG PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            option = 2;
-                            XacNhan(position);
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setNeutralButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    })
-                    .setCancelable(false);
-            builder.create().show();
-        } else if (veSom.getStatus_quanly().equals("YES")) {
-            builder
-                    .setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
-                    .setMessage(title)
-
-                    .setNegativeButton("THU HỒI", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            option = 3;
-                            XacNhan(position);
-                        }
-                    })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-
-                        }
-                    })
-                    .setCancelable(false);
-            builder.create().show();
-        } else if (veSom.getStatus_quanly().equals("NO")) {
-            builder
-                    .setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
-                    .setMessage(title)
-
-                    .setNegativeButton("PHÊ DUYỆT", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            option = 1;
-                            XacNhan(position);
-                        }
-                    })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         }
+
+
     }
 
     private void PheDuyet_VeSom(final VeSom veSom, final int position) {
@@ -308,80 +324,75 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
         String title = "";
         if (veSom.getStatus_nhansu().equals("")) {
             title = "Bạn có muốn phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
-        } else if (veSom.getStatus_nhansu().equals("YES")) {
-            title = "Bạn có muốn thu hồi phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
-        } else if (veSom.getStatus_nhansu().equals("NO")) {
-            title = "Bạn có muốn phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
-        }
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-        if (veSom.getStatus_nhansu().equals("")) {
-            builder.setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Phê Duyệt")
                     .setMessage(title)
-                    .setNegativeButton("PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Phê duyệt", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 1;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("KHÔNG PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Không phê duyệt", R.drawable.ic_khong_duyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 2;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setNeutralButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    })
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         } else if (veSom.getStatus_nhansu().equals("YES")) {
-            builder
-                    .setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
+            title = "Bạn có muốn thu hồi phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Thu Hồi")
                     .setMessage(title)
-                    .setNegativeButton("THU HỒI", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Thu hồi", R.drawable.ic_thuhoi, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 3;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         } else if (veSom.getStatus_nhansu().equals("NO")) {
-            builder
+            title = "Bạn có muốn phê duyệt phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
                     .setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
                     .setMessage(title)
-                    .setNegativeButton("PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Phê Duyệt", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 1;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         }
+
+
     }
 
     public void PheDuyet(int position) {
@@ -397,6 +408,7 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
+            JSONObject jsonObject = null;
             int position = Integer.parseInt(extraData.get("position").toString());
             switch (TAG) {
                 case "XACNHAN_VESOM":
@@ -412,6 +424,21 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
                     data.get(position).setStatus_nhansu(veSom1.getStatus_nhansu());
                     data.get(position).setNguoiduyet((veSom1.getNguoiduyet()));
                     notifyItemChanged(position);
+                    break;
+                case "DELETE_NHANVIEN_VESOM":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        String status = jsonObject.getString("status");
+                        if (status.equals("OK")) {
+                            MDToast.makeText(mContext, "Đã xóa thành công đăng ký về sớm của nhân viên (" + data.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                            data.remove(position);
+                            notifyDataSetChanged();
+                        } else {
+                            MDToast.makeText(mContext, "Phiếu đăng ký đi về sớm của nhân viên (" + data.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                        }
+                    } catch (JSONException e) {
+                        MDToast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
+                    }
                     break;
             }
         } else {

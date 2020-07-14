@@ -150,7 +150,7 @@ public class NhatKyQuetThe_MaNV_Activity extends AppCompatActivity implements IR
         request.params.put("option", option);
         request.params.put("tungay", strTuNgay);
         request.params.put("denngay", strDenNgay);
-        request.params.put("manv", Modules1.objNhanVien.getManv2());
+        request.params.put("manv", Modules1.strMaNV);
         request.execute();
         //Làm mới dữ liệu
         swiperefresh.setRefreshing(false);

@@ -16,6 +16,11 @@ public class HopDongLaoDong {
     @SerializedName("manv")
     @Expose
     private String manv;
+
+    @SerializedName("manv2")
+    @Expose
+    private String manv2;
+
     @SerializedName("tennv")
     @Expose
     private String tennv;
@@ -44,6 +49,18 @@ public class HopDongLaoDong {
     @Expose
     private String hinh;
 
+    @SerializedName("hinhthuctraluong")
+    @Expose
+    private String hinhthuctraluong;
+
+    @SerializedName("noidungcongviec")
+    @Expose
+    private String noidungcongviec;
+
+    @SerializedName("tinhtrang")
+    @Expose
+    private String tinhtrang;
+
     public Integer getId() {
         return id;
     }
@@ -66,6 +83,14 @@ public class HopDongLaoDong {
 
     public void setManv(String manv) {
         this.manv = manv;
+    }
+
+    public String getManv2() {
+        return manv2;
+    }
+
+    public void setManv2(String manv2) {
+        this.manv2 = manv2;
     }
 
     public String getTennv() {
@@ -140,5 +165,28 @@ public class HopDongLaoDong {
         this.hinh = hinh;
     }
 
+    public String getHinhthuctraluong() {
+        return hinhthuctraluong;
+    }
+
+    public void setHinhthuctraluong(String hinhthuctraluong) {
+        this.hinhthuctraluong = hinhthuctraluong;
+    }
+
+    public String getNoidungcongviec() {
+        return noidungcongviec;
+    }
+
+    public void setNoidungcongviec(String noidungcongviec) {
+        this.noidungcongviec = noidungcongviec;
+    }
+
+    public String getTinhtrang() {
+        return tinhtrang;
+    }
+
+    public void setTinhtrang(String tinhtrang) {
+        this.tinhtrang = tinhtrang;
+    }
 }
 

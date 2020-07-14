@@ -86,7 +86,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
 
-    String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV="";
+    String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
 //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
 
@@ -113,7 +113,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
         View rootView = inflater.inflate(R.layout.fragment_nghiphep, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         iRequestHttpCallback = this;
-        mContext=getActivity();
+        mContext = getActivity();
         return rootView;
     }
 
@@ -125,19 +125,12 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                 recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-//                nhatKyTop50 = lstNhatKy.get(position);
-//                String url = nhatKyTop50.getHinhanh2();
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                CongTac congTac = (CongTac) lstCongTac.get(position);
-                if (congTac.getStatus_nhansu().equals("") && congTac.getStatus_quanly().equals("")) {
-                    Delete_NhanVienCongTac(congTac, position);
-                } else {
-                    MDToast.makeText(mContext, "Phiếu đi công tác của nhân viên (" + congTac.getTennv() + ") đã phê duyệt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                }
+
             }
         }));
 
@@ -168,7 +161,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
     }
 
     @OnClick(R.id.btnQR)
-    public void ScanQR(){
+    public void ScanQR() {
         Intent intent = new Intent(mContext, ScanQR_Activity.class);
         startActivityForResult(intent, 100);
     }
@@ -177,9 +170,8 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            StrMaNV =  data.getStringExtra("result");
-            //MDToast.makeText(mContext, StrMaNV, Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-            option=3;
+            StrMaNV = data.getStringExtra("result");
+            option = 3;
             LoadData();
             fab_menu.close(false);
         }
@@ -477,31 +469,6 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
         request.execute();
     }
 
-    private void Delete_NhanVienCongTac(final CongTac congTac, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
-                .setMessage("Bạn có muốn xóa phiếu đăng ký đi công tác của nhân viên (" + congTac.getTennv() + ") này không?")
-
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String id = String.valueOf(congTac.getId());
-                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_CONGTAC");
-                        request.params.put("id", id);
-                        request.extraData.put("position", position);
-                        request.execute();
-                    }
-                })
-                .setPositiveButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setCancelable(false);
-        builder.create().show();
-    }
-
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
@@ -521,22 +488,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                     //Làm mới dữ liệu
                     swiperefresh.setRefreshing(false);
                     break;
-                case "DELETE_NHANVIEN_CONGTAC":
-                    try {
-                        jsonObject = new JSONObject(responseText);
-                        int position = Integer.parseInt(extraData.get("position").toString());
-                        String status = jsonObject.getString("status");
-                        if (status.equals("OK")) {
-                            MDToast.makeText(getActivity(), "Đã xóa thành công đăng ký đi công tác của nhân viên (" + lstCongTac.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                            lstCongTac.remove(position);
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            MDToast.makeText(getActivity(), "Phiếu đăng ký đi công tác của nhân viên (" + lstCongTac.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                        }
-                    } catch (JSONException e) {
-                        MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
-                    }
-                    break;
+
                 case "INSERT_NHANVIEN_CONGTAC":
                     try {
                         jsonObject = new JSONObject(responseText);

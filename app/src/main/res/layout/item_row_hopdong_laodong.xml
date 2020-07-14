@@ -32,23 +32,16 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/txtNgayNhap"
+                    android:id="@+id/txtMaSoHD"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.35"
-                    android:paddingLeft="6dp"
+                    android:layout_weight="1"
                     android:gravity="left|center_vertical"
-                    android:text="Ngày: 25/07/2012"
+                    android:paddingLeft="6dp"
+                    android:text="HĐ số: 002597-01"
                     android:textStyle="bold"></TextView>
 
-                <TextView
-                    android:id="@+id/txtNoiKham"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.65"
-                    android:gravity="right|center_vertical"
-                    android:text="Nơi khám: BỆNH VIỆN CHỢ RẪY"
-                    android:textStyle="bold"></TextView>
+
             </LinearLayout>
 
             <LinearLayout
@@ -59,32 +52,22 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/txtTuNgay"
+                    android:id="@+id/txtNgayKy"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:paddingLeft="6dp"
+                    android:layout_weight="0.6"
                     android:gravity="left|center_vertical"
-                    android:text="Từ ngày: 12/12/2020"></TextView>
+                    android:paddingLeft="6dp"
+                    android:text="Ngày ký: 12/12/2020"></TextView>
 
                 <TextView
-                    android:id="@+id/txtDenNgay"
+                    android:id="@+id/txtTinhTrang"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:gravity="right|center_vertical"
-                    android:text="Đến ngày: 25/12/2019"></TextView>
+                    android:layout_weight="0.4"
+                    android:gravity="left|center_vertical"
+                    android:text="Tình trạng: Đang hiệu lực"></TextView>
             </LinearLayout>
-
-
-            <TextView
-                android:id="@+id/txtGhiChu"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingLeft="6dp"
-                android:gravity="left|center_vertical"
-                android:text="Ghi chú: Khám mắt"></TextView>
 
 
             <LinearLayout
@@ -92,29 +75,36 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:weightSum="1"
-                >
+                android:weightSum="1">
+
                 <TextView
-                    android:id="@+id/txtTinhTrang"
+                    android:id="@+id/txtMucLuong"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:paddingLeft="6dp"
+                    android:layout_weight="0.6"
                     android:gravity="left|center_vertical"
-                    android:text="Tình trạng: Đã thanh toán"
+                    android:paddingLeft="6dp"
+                    android:text="Mức lương: 7.000.000"
                     android:textStyle="bold"></TextView>
 
                 <TextView
-                    android:id="@+id/txtSoTien"
+                    android:id="@+id/txtHinhThucTraLuong"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:gravity="right|center_vertical"
-                    android:paddingLeft="6dp"
-                    android:text="Số tiền: 175,000"
-                    android:textStyle="bold"></TextView>
+                    android:layout_weight="0.4"
+                    android:gravity="left|center_vertical"
 
+                    android:text="Hình thức: Chuyển khoản"></TextView>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtNoiDungCongViec"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingLeft="6dp"
+                android:gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:text="Công việc: Lập trình phần mềm."></TextView>
         </LinearLayout>
     </LinearLayout>
 

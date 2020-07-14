@@ -6,6 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class LenhTangCa {
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+
     @SerializedName("malenh")
     @Expose
     private String malenh;
@@ -19,6 +23,14 @@ public class LenhTangCa {
     @Expose
     private String tenpx;
 
+    @SerializedName("manhom")
+    @Expose
+    private String manhom;
+
+    @SerializedName("nhommay")
+    @Expose
+    private String nhommay;
+
     @SerializedName("giobd")
     @Expose
     private String giobd;
@@ -30,6 +42,14 @@ public class LenhTangCa {
     @SerializedName("status")
     @Expose
     private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getMalenh() {
         return malenh;
@@ -83,7 +103,23 @@ public class LenhTangCa {
         return status;
     }
 
-    public void setStatus(String status) {        this.status = status;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
+    public String getManhom() {
+        return manhom;
+    }
+
+    public void setManhom(String manhom) {
+        this.manhom = manhom;
+    }
+
+    public String getNhommay() {
+        return nhommay;
+    }
+
+    public void setNhommay(String nhommay) {
+        this.nhommay = nhommay;
+    }
 }

@@ -36,13 +36,13 @@
             android:layout_weight="0.7"
             android:orientation="vertical"
             android:paddingLeft="8dp"
-            android:weightSum="8">
+            android:weightSum="8.8">
 
             <TextView
                 android:id="@+id/txtMaNV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Mã nhân viên: 002597"
                 android:textStyle="bold"></TextView>
 
@@ -50,7 +50,7 @@
                 android:id="@+id/txtHoTen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="CÁI TRÍ MINH"
                 android:textStyle="bold"></TextView>
 
@@ -59,7 +59,7 @@
                 android:id="@+id/txtPhanXuong"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="BP. ERP"
                 android:textStyle="bold"></TextView>
 
@@ -67,7 +67,7 @@
                 android:id="@+id/txtChuyen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="BP. ERP"
                 android:textStyle="bold"></TextView>
 
@@ -75,7 +75,7 @@
                 android:id="@+id/txtTongPhepNam"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Phép năm: 12">
                </TextView>
 
@@ -83,7 +83,7 @@
                 android:id="@+id/txtNghiPhepNam"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Nghỉ phép năm: 12">
                 </TextView>
 
@@ -91,7 +91,7 @@
             android:id="@+id/txtPhepNamConLai"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:text="Phép năm còn lại: 12">
             </TextView>
 
@@ -99,7 +99,7 @@
                 android:id="@+id/txtThamNien"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Thâm niên: 12">
                </TextView>
         </LinearLayout>

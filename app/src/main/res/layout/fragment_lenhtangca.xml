@@ -6,21 +6,22 @@
     android:layout_width="match_parent"
     android:background="#ffffff"
     android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:layout_height="match_parent"
     >
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="38dp">
+        android:layout_height="32dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1.2"
-            android:layout_height="38dp">
+            android:layout_height="32dp">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.22"
                 android:text="Mã lệnh"
                 android:gravity="center|left"
                 android:textStyle="bold"
@@ -29,7 +30,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.25"
+                android:layout_weight="0.2"
                 android:text="Ngày "
                 android:gravity="center|left"
                 android:textStyle="bold"
@@ -38,7 +39,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.35"
+                android:layout_weight="0.3"
                 android:text="Phân xưởng"
                 android:gravity="center|left"
                 android:textStyle="bold"
@@ -47,21 +48,14 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.15"
-                android:text="Giờ BĐ"
+                android:layout_weight="0.48"
+                android:text="Công việc"
                 android:gravity="center|left"
                 android:textStyle="bold"
                 android:layout_height="match_parent">
             </TextView>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="0.15"
-                android:text="Giờ KT"
-                android:gravity="center|left"
-                android:textStyle="bold"
-                android:layout_height="match_parent">
-            </TextView>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -75,7 +69,7 @@
             android:id="@+id/recycleView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="45dp"
+            android:paddingTop="32dp"
             />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

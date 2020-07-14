@@ -35,13 +35,13 @@
             android:layout_weight="0.7"
             android:orientation="vertical"
             android:paddingLeft="8dp"
-            android:weightSum="8">
+            android:weightSum="8.8">
 
             <TextView
                 android:id="@+id/txtMaNV"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:textStyle="bold"
                 android:text="Mã nhân viên: 002597"></TextView>
 
@@ -49,7 +49,7 @@
                 android:id="@+id/txtHoTen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:textStyle="bold"
                 android:text="CÁI TRÍ MINH"></TextView>
 
@@ -57,21 +57,21 @@
                 android:id="@+id/txtNgayNghiTS"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Ngày nghỉ: 20/07/2020"></TextView>
 
             <TextView
                 android:id="@+id/txtNgayLamLai"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:text="Ngày sinh: 13/03/1987"></TextView>
 
             <TextView
                 android:id="@+id/txtPhanXuong"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:textStyle="bold"
                 android:text="KẾ TOÁN TÀI CHÍNH"></TextView>
 
@@ -79,14 +79,14 @@
                 android:id="@+id/txtChuyen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:textStyle="bold"
                 android:text="Kế toán"></TextView>
             <TextView
                 android:id="@+id/txtTo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:textStyle="bold"
                 android:text="Kế toán"></TextView>
 
@@ -94,7 +94,7 @@
                 android:id="@+id/txtTrangThai"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:textStyle="bold"
                 android:text="Trạng thái: Nghỉ thai sản"></TextView>
         </LinearLayout>

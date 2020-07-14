@@ -53,6 +53,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -129,9 +130,9 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                 recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Modules1.objLenhTangCa = lstLenhTangCa.get(position);
-                Intent intent_nghiphep = new Intent(mContext, NhanVienTangCa_MaLenh_Activity.class);
-                mContext.startActivity(intent_nghiphep);
+//                Modules1.objLenhTangCa = lstLenhTangCa.get(position);
+//                Intent intent_nghiphep = new Intent(mContext, NhanVienTangCa_MaLenh_Activity.class);
+//                mContext.startActivity(intent_nghiphep);
             }
 
             @Override
@@ -151,28 +152,31 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
     }
 
     private void Delete_LenhTangCa(final LenhTangCa lenhTangCa, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(getActivity())
                 .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
                 .setMessage("Bạn có muốn xóa lệnh tăng ca (" + lenhTangCa.getMalenh() + ") này không?")
-
-                .setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
+                .setCancelable(false)
+                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String malenh = String.valueOf(lenhTangCa.getMalenh());
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        String id = String.valueOf(lenhTangCa.getId());
                         AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_lenhtangca", iRequestHttpCallback, "DELETE_LENHTANGCA");
-                        request.params.put("malenh", malenh);
+                        request.params.put("id", id);
                         request.extraData.put("position", position);
                         request.execute();
+                        dialogInterface.dismiss();
                     }
+
                 })
-                .setPositiveButton("Bỏ Qua", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Bỏ Qua", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
                     }
+
                 })
-                .setCancelable(false);
-        builder.create().show();
+                .build();
+        mBottomSheetDialog.show();
     }
 
     public void LoadData() {

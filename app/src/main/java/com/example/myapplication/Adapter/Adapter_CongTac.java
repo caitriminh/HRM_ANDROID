@@ -1,10 +1,13 @@
 package com.example.myapplication.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +19,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.AsyncPostHttpRequest;
+import com.example.myapplication.Helper.ImageHelper;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.Model.CongTac;
 import com.example.myapplication.Model.NghiPhep;
@@ -29,10 +34,18 @@ import com.example.myapplication.ui.CongTac.CongTac_Activity;
 import com.example.myapplication.ui.VeSom.VeSom_Activity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
+import com.skydoves.powermenu.MenuAnimation;
+import com.skydoves.powermenu.OnMenuItemClickListener;
+import com.skydoves.powermenu.PowerMenu;
+import com.skydoves.powermenu.PowerMenuItem;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -52,7 +65,8 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
     private List<CongTac> temp = new ArrayList<>();
     private Unbinder unbinder;
 
-    Integer option = 1;
+    Integer option = 1, position_item = -1;
+    PowerMenu powerMenu;
     IRequestHttpCallback iRequestHttpCallback;
 
     public Adapter_CongTac(Context mContext, List<CongTac> data) {
@@ -112,49 +126,77 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                 .networkPolicy(NetworkPolicy.NO_CACHE)
                 .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(holder.imgView);
-
         holder.txtMenuOpTion.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(mContext, holder.txtMenuOpTion);
-                popup.inflate(R.menu.option_menu_congtac);
-                setForceShowIcon(popup);
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        CongTac congTac = (CongTac) data.get(position);
-                        switch (menuItem.getItemId()) {
-                            case R.id.menu_xacnhan:
-                                if (congTac.getStatus_nhansu().equals("YES") || congTac.getStatus_nhansu().equals("NO")) {
-                                    MDToast.makeText(mContext, "Đăng ký đi công tác của nhân viên (" + congTac.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
-                                } else {
-                                    XacNhan_CongTac(congTac, position);
-                                }
-                                break;
-                            case R.id.menu_pheduyet:
-                                PheDuyet_CongTac(congTac, position);
-                                break;
-                            case R.id.menu_ct_congtac:
-                                Modules1.strMaNV = data.get(position).getManv2();
-                                Intent intent_congtac = new Intent(mContext, CongTac_Activity.class);
-                                mContext.startActivity(intent_congtac);
-                                break;
-                            case R.id.menu_xemanh:
-                                congTac = data.get(position);
-                                String url = congTac.getHinh();
-                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                                break;
-                        }
-                        return false;
-                    }
-
-                });
-                //displaying the popup
-                popup.show();
+                position_item = position;
+                powerMenu = new PowerMenu.Builder(mContext)
+                        // .setHeaderView(R.layout.layout_dialog_header)
+                        .addItem(new PowerMenuItem("Xác nhận", R.drawable.ic_baseline_security_24, "XACNHAN")) // add an item.
+                        .addItem(new PowerMenuItem("Phê duyệt", R.drawable.ic_menu_pheduyet, "PHEDUYET")) // aad an item list.
+                        .addItem(new PowerMenuItem("Nhật ký đi công tác", R.drawable.ic_ct_nghiphep, "NHATKY")) // aad an item list.
+                        .addItem(new PowerMenuItem("Xem ảnh", R.drawable.ic_menu_xemanh, "XEMANH")) // aad an item list.
+                        .addItem(new PowerMenuItem("Xóa", R.drawable.ic_delete, "XOA")) // aad an item list.
+                        .setAnimation(MenuAnimation.ELASTIC_CENTER)
+                        .setWidth(600)
+                        .setDivider(new ColorDrawable(ContextCompat.getColor(mContext, R.color.bluegrey200))) // sets a divider.
+                        .setDividerHeight(1)
+                        .setMenuRadius(10f) // sets the corner radius.
+                        .setMenuShadow(10f) // sets the shadow.
+                        .setTextColor(ContextCompat.getColor(mContext, R.color.grey700))
+                        .setTextGravity(Gravity.LEFT)
+                        .setTextSize(16)
+                        .setSelectedTextColor(Color.WHITE)
+                        .setMenuColor(Color.WHITE)
+                        .setSelectedMenuColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+                        .setOnMenuItemClickListener(onMenuItemClickListener)
+                        .build();
+                //powerMenu.showAsAnchorCenter(view.getRootView(), 0, 0);
+                powerMenu.showAsAnchorCenter(view, 0, 0);
             }
         });
     }
+
+    private OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = new OnMenuItemClickListener<PowerMenuItem>() {
+        @Override
+        public void onItemClick(int position, PowerMenuItem item) {
+            CongTac congTac = data.get(position_item);
+            String TAG = item.getTag().toString();
+            switch (TAG) {
+                case "XACNHAN":
+                    if (congTac.getStatus_nhansu().equals("YES") || congTac.getStatus_nhansu().equals("NO")) {
+                        MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + congTac.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    } else {
+                        XacNhan_CongTac(congTac, position_item);
+                    }
+                    break;
+                case "PHEDUYET":
+                    PheDuyet_CongTac(congTac, position_item);
+                    break;
+                case "NHATKY":
+                    Modules1.strMaNV = data.get(position_item).getManv2();
+                    Intent intent_vesom = new Intent(mContext, VeSom_Activity.class);
+                    mContext.startActivity(intent_vesom);
+                    break;
+                case "XEMANH":
+                    congTac = data.get(position_item);
+                    String url = congTac.getHinh();
+                    ArrayList<String> listImage = new ArrayList<>();
+                    listImage.add(url);
+                    ImageHelper.ViewImageFromList(listImage, mContext);
+                    break;
+                case "XOA":
+                    if (congTac.getStatus_nhansu().equals("") && congTac.getStatus_quanly().equals("")) {
+                        Delete_NhanVienCongTac(congTac, position_item);
+                    } else {
+                        MDToast.makeText(mContext, "Đăng ký đi công tác của nhân viên (" + congTac.getTennv() + ") đã được phê duyệt hoặc đã xác nhận.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                        break;
+                    }
+            }
+            powerMenu.dismiss();
+        }
+    };
 
     public void XacNhan(int position) {
         String id = String.valueOf(congTac.getId());
@@ -171,86 +213,74 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
         String title = "";
         if (congTac.getStatus_quanly().equals("")) {
             title = "Bạn có muốn xác nhận đơn xin nghi phép nhân viên (" + congTac.getTennv() + ") này không?";
-
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Xác Nhận")
+                    .setMessage(title)
+                    .setCancelable(false)
+                    .setPositiveButton("Xác nhận", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            option = 1;
+                            XacNhan(position);
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Không xác nhận", R.drawable.ic_khong_duyet, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            option = 2;
+                            XacNhan(position);
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .build();
+            mBottomSheetDialog.show();
         } else if (congTac.getStatus_quanly().equals("YES")) {
             title = "Bạn có muốn thu hồi xác nhận đơn xin nghi phép nhân viên (" + congTac.getTennv() + ") này không?";
+            title = "Bạn có muốn thu hồi phê duyệt phiếu đăng ký về sớm của nhân viên (" + congTac.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Thu Hồi")
+                    .setMessage(title)
+                    .setCancelable(false)
+                    .setPositiveButton("Thu hồi", R.drawable.ic_thuhoi, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            option = 3;
+                            XacNhan(position);
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
+                        @Override
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .build();
+            mBottomSheetDialog.show();
 
         } else if (congTac.getStatus_quanly().equals("NO")) {
             title = "Bạn có muốn xác nhận đơn xin nghi phép nhân viên (" + congTac.getTennv() + ") này không?";
-
-        }
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-        if (congTac.getStatus_quanly().equals("")) {
-            builder.setTitle("Xác Nhận")
-                    .setIcon(R.drawable.message_icon)
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Xác Nhận")
                     .setMessage(title)
-
-                    .setNegativeButton("XÁC NHẬN", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Xác nhận", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 1;
                             XacNhan(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("KHÔNG XÁC NHẬN", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            option = 2;
-                            XacNhan(position);
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setNeutralButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    })
-                    .setCancelable(false);
-            builder.create().show();
-        } else if (congTac.getStatus_quanly().equals("YES")) {
-            builder
-                    .setTitle("Xác Nhận")
-                    .setIcon(R.drawable.message_icon)
-                    .setMessage(title)
-
-                    .setNegativeButton("THU HỒI", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            option = 3;
-                            XacNhan(position);
-                        }
-                    })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-
-                        }
-                    })
-                    .setCancelable(false);
-            builder.create().show();
-        } else if (congTac.getStatus_quanly().equals("NO")) {
-            builder
-                    .setTitle("Xác Nhận")
-                    .setIcon(R.drawable.message_icon)
-                    .setMessage(title)
-
-                    .setNegativeButton("XÁC NHẬN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            option = 1;
-                            XacNhan(position);
-                        }
-                    })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         }
     }
 
@@ -259,79 +289,72 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
         String title = "";
         if (congTac.getStatus_nhansu().equals("")) {
             title = "Bạn có muốn phê duyệt đi công tác nhân viên (" + congTac.getTennv() + ") này không?";
-        } else if (congTac.getStatus_nhansu().equals("YES")) {
-            title = "Bạn có muốn thu hồi phê duyệt đi công tác nhân viên (" + congTac.getTennv() + ") này không?";
-        } else if (congTac.getStatus_nhansu().equals("NO")) {
-            title = "Bạn có muốn phê duyệt đơn xin nghi phép nhân viên (" + congTac.getTennv() + ") này không?";
-        }
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-        if (congTac.getStatus_nhansu().equals("")) {
-            builder.setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Phê Duyệt")
                     .setMessage(title)
-                    .setNegativeButton("PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Phê duyệt", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 1;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("KHÔNG PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Không phê duyệt", R.drawable.ic_khong_duyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 2;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setNeutralButton("BỎ QUA", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    })
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         } else if (congTac.getStatus_nhansu().equals("YES")) {
-            builder
-                    .setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
+            title = "Bạn có muốn thu hồi phê duyệt đi công tác nhân viên (" + congTac.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                    .setTitle("Thu Hồi")
                     .setMessage(title)
-                    .setNegativeButton("THU HỒI", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Thu hồi", R.drawable.ic_thuhoi, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 3;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         } else if (congTac.getStatus_nhansu().equals("NO")) {
-            builder
+            title = "Bạn có muốn phê duyệt phiếu đi công tác nhân viên (" + congTac.getTennv() + ") này không?";
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
                     .setTitle("Phê Duyệt")
-                    .setIcon(R.drawable.message_icon)
                     .setMessage(title)
-                    .setNegativeButton("PHÊ DUYỆT", new DialogInterface.OnClickListener() {
+                    .setCancelable(false)
+                    .setPositiveButton("Phê Duyệt", R.drawable.ic_menu_pheduyet, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                             option = 1;
                             PheDuyet(position);
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setPositiveButton("BỎ QUA", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
+                        public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
                         }
                     })
-                    .setCancelable(false);
-            builder.create().show();
+                    .build();
+            mBottomSheetDialog.show();
         }
     }
 
@@ -345,35 +368,42 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
         request.execute();
     }
 
-    //Set icon menu popup
-    public static void setForceShowIcon(PopupMenu popupMenu) {
-        try {
-            Field[] fields = popupMenu.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if ("mPopup".equals(field.getName())) {
-                    field.setAccessible(true);
-                    Object menuPopupHelper = field.get(popupMenu);
-                    Class<?> classPopupHelper = Class.forName(menuPopupHelper
-                            .getClass().getName());
-                    Method setForceIcons = classPopupHelper.getMethod(
-                            "setForceShowIcon", boolean.class);
-                    setForceIcons.invoke(menuPopupHelper, true);
-                    break;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int getItemCount() {
         return data.size();
     }
 
+    private void Delete_NhanVienCongTac(final CongTac congTac, final int position) {
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                .setTitle("Xác Nhận")
+                .setMessage("Bạn có muốn xóa phiếu đăng ký đi công tác của nhân viên (" + congTac.getTennv() + ") này không?")
+                .setCancelable(false)
+                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        String id = String.valueOf(congTac.getId());
+                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_CONGTAC");
+                        request.params.put("id", id);
+                        request.extraData.put("position", position);
+                        request.execute();
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+
+                        dialogInterface.dismiss();
+                    }
+                })
+                .build();
+        mBottomSheetDialog.show();
+    }
+
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
+            JSONObject jsonObject = null;
             int position = Integer.parseInt(extraData.get("position").toString());
             switch (TAG) {
                 case "XACNHAN_CONGTAC":
@@ -389,6 +419,21 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                     data.get(position).setStatus_nhansu(congTac1.getStatus_nhansu());
                     data.get(position).setNguoiduyet((congTac1.getNguoiduyet()));
                     notifyItemChanged(position);
+                    break;
+                case "DELETE_NHANVIEN_CONGTAC":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        String status = jsonObject.getString("status");
+                        if (status.equals("OK")) {
+                            MDToast.makeText(mContext, "Đã xóa thành công đăng ký đi công tác của nhân viên (" + data.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                            data.remove(position);
+                            notifyDataSetChanged();
+                        } else {
+                            MDToast.makeText(mContext, "Phiếu đăng ký đi công tác của nhân viên (" + data.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                        }
+                    } catch (JSONException e) {
+                        MDToast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
+                    }
                     break;
             }
         } else {

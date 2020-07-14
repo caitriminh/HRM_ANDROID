@@ -102,7 +102,7 @@ public class PhepNamFragment extends Fragment implements IRequestHttpCallback {
                 recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Modules1.objPhepNam = lstPhepNam.get(position);
+                Modules1.strMaNV = lstPhepNam.get(position).getManv2();
                 Intent intent = new Intent(mContext, CTPhepNam_Activity.class);
                 mContext.startActivity(intent);
             }
@@ -141,8 +141,7 @@ public class PhepNamFragment extends Fragment implements IRequestHttpCallback {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             strMaNV = data.getStringExtra("result");
-            //MDToast.makeText(mContext, StrMaNV, Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-            option = 6;
+                       option = 6;
             LoadData();
             fab_menu.close(false);
         }

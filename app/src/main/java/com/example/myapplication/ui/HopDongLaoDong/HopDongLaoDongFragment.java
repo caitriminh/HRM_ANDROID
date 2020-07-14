@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.HopDongLaoDong;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,6 +43,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -198,28 +200,29 @@ public class HopDongLaoDongFragment extends Fragment implements IRequestHttpCall
     }
 
     private void Delete_HopDongLaoDong(final HopDongLaoDong hopDongLaoDong, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
+                .setTitle("Xóa")
                 .setMessage("Bạn có muốn xóa hợp đồng lao động của nhân viên (" + hopDongLaoDong.getTennv() + ") này không?")
-
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                .setCancelable(false)
+                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String id = String.valueOf(hopDongLaoDong.getId());
-                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_nghiphep", iRequestHttpCallback, "DELETE_NHANVIEN_CONGTAC");
-                        request.params.put("id", id);
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        String manv = String.valueOf(hopDongLaoDong.getManv2());
+                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_hopdong_laodong", iRequestHttpCallback, "DELETE_HOPDONG_LAODONG");
+                        request.params.put("manv", manv);
                         request.extraData.put("position", position);
                         request.execute();
+                        dialogInterface.dismiss();
                     }
                 })
-                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Đóng", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
                     }
                 })
-                .setCancelable(false);
-        builder.create().show();
+                .build();
+        mBottomSheetDialog.show();
     }
 
     @Override
@@ -244,7 +247,7 @@ public class HopDongLaoDongFragment extends Fragment implements IRequestHttpCall
 //                    shimmerFrameLayout.setVisibility(View.GONE);
 //                    shimmerFrameLayout.stopShimmer();
                     break;
-                case "DELETE_NHANVIEN_CONGTAC":
+                case "DELETE_HOPDONG_LAODONG":
                     try {
                         jsonObject = new JSONObject(responseText);
                         int position = Integer.parseInt(extraData.get("position").toString());

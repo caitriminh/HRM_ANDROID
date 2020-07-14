@@ -109,15 +109,12 @@ public class BaoHiemFragment extends Fragment implements IRequestHttpCallback {
         recycleView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recycleView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-//                nhanVien = lstNhanVien.get(position);
-//                String url = nhanVien.getHinh();
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                BaoHiem baoHiem = (BaoHiem) lstBaoHiem.get(position);
-                Delete_BaoHiem(baoHiem, position);
+
             }
         }));
 
@@ -203,32 +200,6 @@ public class BaoHiemFragment extends Fragment implements IRequestHttpCallback {
         request.execute();
     }
 
-    private void Delete_BaoHiem(final BaoHiem baoHiem, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
-                .setMessage("Bạn có muốn xóa thông tin bảo hiểm của nhân viên (" + baoHiem.getTennv() + ") này không?")
-
-                .setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String manv = String.valueOf(baoHiem.getManv2());
-                        AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_baohiem", iRequestHttpCallback, "DELETE_BAOHIEM");
-                        request.params.put("manv", manv);
-                        request.extraData.put("position", position);
-                        request.execute();
-                    }
-                })
-                .setPositiveButton("Bỏ Qua", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setCancelable(false);
-        builder.create().show();
-    }
-
-
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
@@ -248,22 +219,7 @@ public class BaoHiemFragment extends Fragment implements IRequestHttpCallback {
                     //Làm mới dữ liệu
                     swiperefresh.setRefreshing(false);
                     break;
-                case "DELETE_BAOHIEM":
-                    try {
-                        jsonObject = new JSONObject(responseText);
-                        int position = Integer.parseInt(extraData.get("position").toString());
-                        String status = jsonObject.getString("status");
-                        if (status.equals("OK")) {
-                            MDToast.makeText(getActivity(), "Đã xóa thành công thông tin bảo hiểm của nhân viên (" + lstBaoHiem.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                            lstBaoHiem.remove(position);
-                            adapter.notifyDataSetChanged();
-                        }
-
-                    } catch (JSONException e) {
-                        MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
-                    }
-                    break;
-            }
+                            }
         } else {
             MDToast.makeText(getActivity(), "Kết nối với máy chủ thất bại.", Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
         }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.example.myapplication.Adapter.Adapter_NhanVienTangCa_MaLenh;
 import com.example.myapplication.AsyncPostHttpRequest;
 import com.example.myapplication.Interface.ClickListener;
 import com.example.myapplication.Interface.IRequestHttpCallback;
+import com.example.myapplication.Model.LoaiNghiPhep;
 import com.example.myapplication.Model.NghiPhep;
 import com.example.myapplication.Model.NhanVien;
 import com.example.myapplication.Model.NhanVienTangCa;
@@ -33,11 +36,13 @@ import com.example.myapplication.Model.NhomMay;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
+import com.example.myapplication.ui.ScanQR.ScanQR_Activity;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -59,8 +64,10 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
 
     IRequestHttpCallback iRequestHttpCallback;
     ArrayList<NhanVienTangCa> lstNhanVienTangCa;
+    ArrayList<NhomMay> lstNhomMay;
     ArrayList<NhanVien> lstNhanVien;
     NhanVien nhanVien;
+    NhomMay nhomMay;
     Adapter_NhanVienTangCa_MaLenh adapter;
     private Unbinder unbinder;
     @BindView(R.id.recycleView)
@@ -68,12 +75,12 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
     Context mContext;
 
     Integer option = 3;
-    String strTuNgay = "", strDenNgay = "", strMaNV="";
+    String strTuNgay = "", strDenNgay = "", strMaNV = "", strNhomMay = "";
 
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
 
-    TextView txtMaLenh, txtPhanXuong, txtNhomCongViec,  txtPhanXuongTC, txtHoTen;
+    TextView txtMaLenh, txtPhanXuong, txtNhomCongViec, txtPhanXuongTC, txtHoTen;
     EditText txtGhiChu, txtMaNV;
     NoboButton btnLuu, btnDong;
 
@@ -108,7 +115,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
             }
         }));
 
-        this.setTitle("Nhân Viên Tăng Ca");
+        this.setTitle("Đăng Ký (" + Modules1.objLenhTangCa.getNgaytangca()+", " + Modules1.objLenhTangCa.getNhommay()+ ")");
         //Làm mới dữ liệu
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -129,28 +136,31 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
     }
 
     private void Delete_NhanVienTangCa(final NhanVienTangCa nhanVienTangCa, final int position) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this)
                 .setTitle("Xác Nhận")
-                .setIcon(R.drawable.message_icon)
                 .setMessage("Bạn có muốn xóa đăng ký tăng ca của nhân viên (" + nhanVienTangCa.getTennv() + ") này không?")
-
-                .setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
+                .setCancelable(false)
+                .setPositiveButton("Xóa", R.drawable.ic_delete, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
                         String id = String.valueOf(nhanVienTangCa.getId());
                         AsyncPostHttpRequest request = new AsyncPostHttpRequest(Modules1.BASE_URL + "delete_nhanvien_tangca", iRequestHttpCallback, "DELETE_NHANVIEN_TANGCA");
                         request.params.put("id", id);
                         request.extraData.put("position", position);
                         request.execute();
+                        dialogInterface.dismiss();
                     }
+
                 })
-                .setPositiveButton("Bỏ Qua", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Bỏ Qua", R.drawable.ic_close, new BottomSheetMaterialDialog.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(com.shreyaspatil.MaterialDialog.interfaces.DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
                     }
+
                 })
-                .setCancelable(false);
-        builder.create().show();
+                .build();
+        mBottomSheetDialog.show();
     }
 
     public void LoadData() {
@@ -175,14 +185,15 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
         txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
         txtPhanXuongTC = view.findViewById(R.id.txtPhanXuongTC);
         txtMaNV = view.findViewById(R.id.txtMaNV);
-        txtHoTen=view.findViewById(R.id.txtHoTen);
+        txtHoTen = view.findViewById(R.id.txtHoTen);
         txtNhomCongViec = view.findViewById(R.id.txtNhomCongViec);
 
 
         btnLuu = view.findViewById(R.id.btnLuu);
         btnDong = view.findViewById(R.id.btnDong);
 
-
+        txtMaLenh.setText("Mã lệnh: " + Modules1.objLenhTangCa.getMalenh());
+        txtPhanXuongTC.setText("Nơi làm việc: " + Modules1.objLenhTangCa.getTenpx());
         builder.setView(view)
                 .setTitle("Đăng Ký Tăng Ca")
                 .setCancelable(false);
@@ -190,9 +201,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
         AlertDialog dialog = builder.create();
         dialog.show();
 
-//        ShowLoaiTangCa(txtLoaiTangCa);
-//        ShowPhanXuong(txtPhanXuong);
-//        ShowNhomMay(txtNhomCongViec);
+        ShowLoaiNhomMay(txtNhomCongViec);
 
         txtMaNV.addTextChangedListener(new TextWatcher() {
             @Override
@@ -227,25 +236,22 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                     return;
                 }
 
-                String url = Modules1.BASE_URL + "insert_lenhtangca";
-                String TAG = "INSERT_LENHTANGCA";
+                String url = Modules1.BASE_URL + "insert_dangky_tangca";
+                String TAG = "INSERT_DANGKYTANGCA";
                 AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
                 //Gửi user va Pass len server
-//                request.params.put("malenh", strMaLenh);
-//                request.params.put("matangca", strMaLoaiTangCa);
-//                request.params.put("ngaytangca", strNgayTangCa);
-//                request.params.put("mapx", strMaPX);
-//                request.params.put("manhom", strMaNhom);
-//                request.params.put("ghichu", txtGhiChu.getText().toString());
-//                request.params.put("nguoitd", Modules1.tendangnhap);
-//                request.extraData.put("malenh", strMaLenh);
+                request.params.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.params.put("manv", txtMaNV.getText());
+                request.params.put("manhom", strNhomMay);
+
+                request.params.put("ghichu", txtGhiChu.getText().toString());
+                request.params.put("nguoitd", Modules1.tendangnhap);
+                request.extraData.put("malenh", Modules1.objLenhTangCa.getMalenh());
                 request.execute();
+                txtMaNV.setText("");
+                txtPhanXuong.setText("");
+                txtHoTen.setText("");
 
-//                dialog.setCancelable(true);
-//                dialog.dismiss();
-
-                txtNhomCongViec.setText(" Chọn nhóm công việc: ");
-                txtGhiChu.setText("");
             }
         });
 
@@ -261,14 +267,87 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
 
     }
 
+    public void ShowLoaiNhomMay(TextView txtNhomCongViec) {
+        txtNhomCongViec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Chọn nhóm công việc");
+                builder.setCancelable(false);
+                String[] arrayNhomMay = new String[lstNhomMay.size()];
+                int i = 0;
+                for (NhomMay nhomMay : lstNhomMay) {
+                    arrayNhomMay[i] = nhomMay.getNhommay();
+                    i++;
+                }
+                ;
+                builder.setSingleChoiceItems(arrayNhomMay, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        NhomMay nhomMay = lstNhomMay.get(i);
+                        txtNhomCongViec.setText("Nhóm công việc: " + nhomMay.getNhommay());
+                        strNhomMay = nhomMay.getManhom();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void LoadNhomMay() {
+        String url = Modules1.BASE_URL + "load_nhommay_lenhtangca";
+        String TAG = "LOAD_NHOMMAY";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.params.put("malenh", Modules1.objLenhTangCa.getMalenh());
+        request.params.put("mapx", Modules1.objLenhTangCa.getMapx());
+        request.execute();
+    }
+
+
     @OnClick(R.id.btnThem)
     public void ThemLenhTangCa() {
         AddNhanVienTangCa();
-//        LoadLoaiTangCa();
-//        LoadPhanXuong();
-//        LoadNhomMay();
+        LoadNhomMay();
 
     }
+
+    @OnClick(R.id.btnQR)
+    public void ScanQR() {
+        Intent intent = new Intent(mContext, ScanQR_Activity.class);
+        startActivityForResult(intent, 100);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            if(resultCode ==101){
+                strMaNV = data.getStringExtra("result");
+                if (strMaNV.isEmpty()) {
+                    fab_menu.close(false);
+                    return;
+                }
+
+                String url = Modules1.BASE_URL + "insert_dangky_tangca";
+                String TAG = "INSERT_DANGKYTANGCA";
+                AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+                //Gửi user va Pass len server
+                request.params.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.params.put("manv", strMaNV);
+                request.params.put("manhom", Modules1.objLenhTangCa.getManhom());
+
+                request.params.put("ghichu", "SCAN QR");
+                request.params.put("nguoitd", Modules1.tendangnhap);
+                request.extraData.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.execute();
+            }
+
+        }
+    }
+
+
 
     public void LoadThongTinNhanVien(String manv) {
         String url = Modules1.BASE_URL + "load_thongtin_nhanvien";
@@ -314,6 +393,19 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                         MDToast.makeText(this, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
                     }
                     break;
+                case "INSERT_DANGKYTANGCA":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        String status = jsonObject.getString("status");
+                        if (status.equals("OK")) {
+                            MDToast.makeText(this, "Đã đăng ký thành công.", Toast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+                            LoadData();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case "LOAD_THONGTIN":
                     try {
                         jsonObject = new JSONObject(responseText);
@@ -324,6 +416,14 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                     } catch (JSONException e) {
                         Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
+                    break;
+                case "LOAD_NHOMMAY":
+                    Gson gsonNhomMay = new Gson();
+                    TypeToken<List<NhomMay>> tokenNhomMay = new TypeToken<List<NhomMay>>() {
+                    };
+                    List<NhomMay> nhomMays = gsonNhomMay.fromJson(responseText, tokenNhomMay.getType());
+                    lstNhomMay = new ArrayList<NhomMay>();
+                    lstNhomMay.addAll(nhomMays);
                     break;
             }
         } else {
