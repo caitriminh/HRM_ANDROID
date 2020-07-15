@@ -48,7 +48,7 @@ public class Adapter_NhatKyQuetThe_MaNV extends RecyclerView.Adapter<Adapter_Nha
         holder.txtNgayQuet.setText(data.get(position).getNgayquet());
         holder.txtMaNV.setText(data.get(position).getManv());
         holder.txtHoTen.setText(data.get(position).getTennv());
-        holder.txtGioQuet.setText(data.get(position).getThoigian());
+        holder.txtLanQuet.setText(data.get(position).getLanquet());
     }
 
     @Override
@@ -67,9 +67,8 @@ public class Adapter_NhatKyQuetThe_MaNV extends RecyclerView.Adapter<Adapter_Nha
         @BindView(R.id.txtHoTen)
         TextView txtHoTen;
 
-        @BindView(R.id.txtGioQuet)
-        TextView txtGioQuet;
-
+        @BindView(R.id.txtLanQuet)
+        TextView txtLanQuet;
 
 
         public RecyclerViewHolder(View itemView) {

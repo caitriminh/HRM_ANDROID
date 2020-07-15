@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -47,9 +48,11 @@ import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
 import com.example.myapplication.ui.nghiphep.NghiPhep_MaNV_Activity;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
@@ -92,11 +95,11 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
     Context mContext;
     //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
-    TextView txtMaLenh, txtNgayTangCa, txtPhanXuong, txtLoaiTangCa, txtNhomCongViec;
-    EditText txtGhiChu;
+    TextInputEditText txtMaLenh, txtNgayTangCa, txtPhanXuong, txtLoaiTangCa, txtNhomCongViec, txtGhiChu;
+
     String strTuNgay = "", strDenNgay = "", strNgayTangCa = "", strMaLoaiTangCa = "", strMaPX = "", strMaNhom = "", strMaLenh = "";
     Integer option = 1;
-    NoboButton btnLuu, btnDong;
+    Button btnLuu, btnDong;
 
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
@@ -190,29 +193,26 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
         request.execute();
     }
 
-    public void AddLenhTangCa() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_diaglog_add_lenhtangca, null);
-        txtMaLenh = view.findViewById(R.id.txtMaLenh);
-        txtNgayTangCa = view.findViewById(R.id.txtNgayTangCa);
-        txtGhiChu = view.findViewById(R.id.txtGhiChu);
-        txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
-        txtLoaiTangCa = view.findViewById(R.id.txtLoaiTangCa);
-        txtNhomCongViec = view.findViewById(R.id.txtNhomCongViec);
+    public void AddLenhTangCa(View view) {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_lenhtangca, null);
+        txtMaLenh = view_bottom_sheet.findViewById(R.id.txtMaLenh);
+        txtNgayTangCa = view_bottom_sheet.findViewById(R.id.txtNgayTangCa);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtLoaiTangCa = view_bottom_sheet.findViewById(R.id.txtLoaiTangCa);
+        txtNhomCongViec = view_bottom_sheet.findViewById(R.id.txtNhomCongViec);
 
 
-        btnLuu = view.findViewById(R.id.btnLuu);
-        btnDong = view.findViewById(R.id.btnDong);
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        txtMaLenh.setText("Lệnh tăng ca: " + strMaLenh);
+        LoadMaLenh();
 
-        builder.setView(view)
-                .setTitle("Thêm Lệnh Tăng Ca")
-                .setCancelable(false);
-
-        AlertDialog dialog = builder.create();
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
         dialog.show();
+
 
         ShowLoaiTangCa(txtLoaiTangCa);
         ShowPhanXuong(txtPhanXuong);
@@ -236,11 +236,10 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                                 String strDate = formatter.format(calendar.getTime());
 
-                                txtNgayTangCa.setText("Ngày tăng ca: " + strDate);
+                                txtNgayTangCa.setText(strDate);
                                 //Lấy giá trị gửi lên server
                                 SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
                                 strNgayTangCa = formatter2.format(calendar.getTime());
-
                             }
                         }, year, month, dayOfMonth);
 
@@ -313,9 +312,9 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
     }
 
     @OnClick(R.id.btnThem)
-    public void ThemLenhTangCa() {
+    public void ThemLenhTangCa(View view) {
         LoadMaLenh();
-        //  AddLenhTangCa();
+        AddLenhTangCa(view);
         LoadLoaiTangCa();
         LoadPhanXuong();
         LoadNhomMay();
@@ -339,7 +338,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         NhomMay nhomMay = lstNhomMay.get(i);
-                        txtNhomCongViec.setText("Nhóm công việc: " + nhomMay.getNhommay());
+                        txtNhomCongViec.setText(nhomMay.getNhommay());
                         strMaNhom = nhomMay.getManhom();
                         dialogInterface.dismiss();
                     }
@@ -374,7 +373,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         PhanXuong phanXuong = lstPhanXuong.get(i);
-                        txtPhanXuong.setText("Phân xưởng: " + phanXuong.getTenpx());
+                        txtPhanXuong.setText(phanXuong.getTenpx());
                         strMaPX = phanXuong.getMapx();
                         dialogInterface.dismiss();
                     }
@@ -409,7 +408,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         LoaiTangCa loaiTangCa = lstLoaiTangCa.get(i);
-                        txtLoaiTangCa.setText("Loại tăng ca: " + loaiTangCa.getLoaitangca());
+                        txtLoaiTangCa.setText(loaiTangCa.getLoaitangca());
                         strMaLoaiTangCa = loaiTangCa.getMatangca();
                         dialogInterface.dismiss();
                     }
@@ -538,7 +537,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                     try {
                         jsonObject = new JSONObject(responseText);
                         strMaLenh = jsonObject.getString("malenh");
-                        AddLenhTangCa();
+                        txtMaLenh.setText(strMaLenh);
                     } catch (JSONException e) {
                         MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
                     }

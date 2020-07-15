@@ -47,7 +47,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -82,6 +84,7 @@ public class NhatKyQuetTheFragment extends Fragment implements IRequestHttpCallb
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         MainActivity.SetTileActionBar("Nhật Ký Quét Thẻ");
     }
 
@@ -101,6 +104,10 @@ public class NhatKyQuetTheFragment extends Fragment implements IRequestHttpCallb
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        strTuNgay = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+        strDenNgay = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+
         LoadData();
         recycleView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
                 recycleView, new ClickListener() {
@@ -166,7 +173,7 @@ public class NhatKyQuetTheFragment extends Fragment implements IRequestHttpCallb
 
                 Calendar calendarEnd = Calendar.getInstance();
                 calendarEnd.setTimeInMillis(endDate);
-                option = 2;
+                option = 1;
                 strTuNgay = formatter.format(calendarStart.getTime());
                 strDenNgay = formatter.format(calendarEnd.getTime());
                 LoadData();

@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -42,9 +43,11 @@ import com.example.myapplication.RecyclerTouchListener;
 import com.example.myapplication.ui.NhatKyQuetThe.NhatKyQuetThe_MaNV_Activity;
 import com.example.myapplication.ui.ScanQR.ScanQR_Activity;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
@@ -88,9 +91,10 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
 
     String StrMaloainghiphep = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
     Context mContext;
-    EditText txtMaNV, txtSoNgay, txtGhiChu;
-    TextView txtHoTen, txtPhanXuong, txtTuNgay, txtDenNgay, txtLoaiNghiPhep;
-    NoboButton btnLuu, btnDong;
+
+    TextInputEditText txtMaNV, txtSoNgay, txtGhiChu, txtHoTen, txtPhanXuong, txtTuNgay, txtDenNgay, txtLoaiNghiPhep;
+
+    Button btnLuu, btnDong;
     Integer option = 1;
 //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
@@ -143,28 +147,24 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
         });
     }
 
-    public void AddNhanVienNghiPhep() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_diaglog_add_nghiphep, null);
-        txtMaNV = view.findViewById(R.id.txtMaNV);
+    public void AddNhanVienNghiPhep(View view) {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_nghiphep, null);
+        txtMaNV = view_bottom_sheet.findViewById(R.id.txtMaNV);
 
-        txtSoNgay = view.findViewById(R.id.txtSoNgay);
-        txtGhiChu = view.findViewById(R.id.txtGhiChu);
-        txtHoTen = view.findViewById(R.id.txtHoTen);
-        txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
-        txtTuNgay = view.findViewById(R.id.txtTuNgay);
-        txtDenNgay = view.findViewById(R.id.txtDenNgay);
-        txtLoaiNghiPhep = view.findViewById(R.id.txtLoaiNghiPhep);
+        txtSoNgay = view_bottom_sheet.findViewById(R.id.txtSoNgay);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
+        txtHoTen = view_bottom_sheet.findViewById(R.id.txtHoTen);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtTuNgay = view_bottom_sheet.findViewById(R.id.txtTuNgay);
+        txtDenNgay = view_bottom_sheet.findViewById(R.id.txtDenNgay);
+        txtLoaiNghiPhep = view_bottom_sheet.findViewById(R.id.txtLoaiNghiPhep);
 
-        btnLuu = view.findViewById(R.id.btnLuu);
-        btnDong = view.findViewById(R.id.btnDong);
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        builder.setView(view)
-                .setTitle("Thêm Nghỉ Phép")
-                .setCancelable(false);
-
-        AlertDialog dialog = builder.create();
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
         dialog.show();
 
         ShowLoaiNghiPhep(txtLoaiNghiPhep);
@@ -205,7 +205,7 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
                                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                                 String strDate = formatter.format(calendar.getTime());
 
-                                txtTuNgay.setText("Từ ngày: " + strDate);
+                                txtTuNgay.setText(strDate);
                                 //Lấy giá trị gửi lên server
                                 SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
                                 StrTuNgay = formatter2.format(calendar.getTime());
@@ -235,7 +235,7 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
                                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                                 String strDate = formatter.format(calendar.getTime());
 
-                                txtDenNgay.setText("Đến ngày: " + strDate);
+                                txtDenNgay.setText(strDate);
                                 //Lấy giá trị gửi lên server
                                 SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
                                 StrDenNgay = formatter2.format(calendar.getTime());
@@ -279,7 +279,7 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
                 request.params.put("maloainghiphep", StrMaloainghiphep);
                 request.params.put("tungay", StrTuNgay);
                 request.params.put("denngay", StrDenNgay);
-                request.params.put("songay", txtSoNgay.getText().toString());
+                request.params.put("songay", Double.parseDouble(txtSoNgay.getText().toString()));
                 request.params.put("ghichu", txtGhiChu.getText().toString());
                 request.params.put("nguoitd", Modules1.tendangnhap);
                 request.extraData.put("tennv", txtHoTen.getText().toString());
@@ -287,7 +287,6 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
 
                 dialog.setCancelable(true);
                 dialog.dismiss();
-
             }
         });
 
@@ -296,14 +295,15 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
             public void onClick(View view) {
                 dialog.setCancelable(true);
                 dialog.dismiss();
+                fab_menu.close(false);
             }
         });
 
     }
 
     @OnClick(R.id.btnThem)
-    public void ThemNghiPhep() {
-        AddNhanVienNghiPhep();
+    public void ThemNghiPhep(View view) {
+        AddNhanVienNghiPhep(view);
         LoadLoaiNghiPhep();
     }
 
@@ -391,7 +391,7 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         LoaiNghiPhep loaiNghiPhep = lstLoaiNghiPhep.get(i);
-                        txtLoaiNghiPhep.setText("Loại nghỉ phép: " + loaiNghiPhep.getLoainghiphep());
+                        txtLoaiNghiPhep.setText(loaiNghiPhep.getLoainghiphep());
                         StrMaloainghiphep = loaiNghiPhep.getMaloainghiphep();
                         dialogInterface.dismiss();
                     }

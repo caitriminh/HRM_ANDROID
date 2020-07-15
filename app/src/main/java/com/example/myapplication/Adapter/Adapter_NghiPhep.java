@@ -102,6 +102,7 @@ public class Adapter_NghiPhep extends RecyclerView.Adapter<Adapter_NghiPhep.Recy
 
         holder.txtNgayDangKy.setText(data.get(position).getNgaynhap());
         holder.txtNgayNghi.setText(data.get(position).getNgaynghi());
+        holder.txtSoNgay.setText(data.get(position).getSongay());
 
         holder.txtLyDo.setText(data.get(position).getLydo());
         holder.txtGhiChu.setText(data.get(position).getGhichu());
@@ -482,7 +483,6 @@ public class Adapter_NghiPhep extends RecyclerView.Adapter<Adapter_NghiPhep.Recy
 
         @BindView(R.id.txtPhanXuong)
         TextView txtPhanXuong;
-
 
         @BindView(R.id.txtGhiChu)
         TextView txtGhiChu;

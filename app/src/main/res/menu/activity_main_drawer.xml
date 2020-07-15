@@ -34,6 +34,10 @@
                 android:icon="@drawable/ic_menu_quetthe"
                 android:title="@string/menu_quetthe" />
             <item
+                android:id="@+id/nav_nhatky_khongquetthe"
+                android:icon="@drawable/ic_menu_khongquetthe"
+                android:title="@string/menu_khongquetthe" />
+            <item
                 android:id="@+id/nav_diemdanh"
                 android:icon="@drawable/ic_menu_diemdanh"
                 android:title="@string/menu_diemdanh" />

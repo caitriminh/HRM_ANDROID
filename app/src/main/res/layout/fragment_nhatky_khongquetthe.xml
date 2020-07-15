@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:background="#ffffff"
     android:paddingLeft="8dp"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="38dp">
@@ -24,8 +24,7 @@
                 android:text="Ngày quét"
                 android:gravity="center|left"
                 android:textStyle="bold"
-                android:layout_height="match_parent">
-            </TextView>
+                android:layout_height="match_parent"></TextView>
 
             <TextView
                 android:layout_width="0dp"
@@ -33,30 +32,27 @@
                 android:text="Mã NV"
                 android:gravity="center|left"
                 android:textStyle="bold"
-                android:layout_height="match_parent">
-            </TextView>
+                android:layout_height="match_parent"></TextView>
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.55"
+                android:layout_weight="0.6"
                 android:text="Họ tên"
                 android:gravity="center|left"
                 android:textStyle="bold"
-                android:layout_height="match_parent">
-            </TextView>
+                android:layout_height="match_parent"></TextView>
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.2"
-                android:text="Lần quét"
-                android:gravity="center|center_vertical"
+                android:layout_weight="0.15"
+                android:text="Giờ"
+                android:gravity="center|left"
                 android:textStyle="bold"
                 android:layout_height="match_parent"></TextView>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -65,8 +61,7 @@
             android:id="@+id/recycleView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="45dp"
-            />
+            android:paddingTop="45dp" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <include

@@ -1,7 +1,6 @@
 package com.example.myapplication.ui.VeSom;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -16,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -31,28 +30,26 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.myapplication.Adapter.Adapter_NghiPhep;
 import com.example.myapplication.Adapter.Adapter_VeSom;
 import com.example.myapplication.AsyncPostHttpRequest;
 import com.example.myapplication.Interface.ClickListener;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.MainActivity;
-import com.example.myapplication.Model.CongTac;
 import com.example.myapplication.Model.LoaiNghiPhep;
-import com.example.myapplication.Model.NghiPhep;
 import com.example.myapplication.Model.VeSom;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
 import com.example.myapplication.ui.ScanQR.ScanQR_Activity;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
-import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -93,9 +90,12 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
     Integer mMinute = 0, mHour = 0, option = 1;
 
-    TextView txtHoTen, txtPhanXuong, txtNgayDangKy, txtLoaiNghiPhep, txtGioRa, txtGioVao;
-    EditText txtMaNV, txtGhiChu;
-    NoboButton btnLuu, btnDong;
+    TextInputEditText txtGioRa, txtMaNV, txtHoTen, txtPhanXuong, txtGioVao, txtGhiChu, txtLyDo;
+
+    Button btnLuu, btnDong;
+    //    TextView txtHoTen, txtPhanXuong, txtNgayDangKy, txtLoaiNghiPhep, txtGioRa, txtGioVao;
+//    EditText txtMaNV, txtGhiChu;
+    //   NoboButton btnLuu, btnDong;
 //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
 
@@ -161,8 +161,8 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     }
 
     @OnClick(R.id.btnThem)
-    public void ThemVeSom() {
-        AddNhanVienVeSom();
+    public void ThemVeSom(View view) {
+        AddNhanVienVeSom(view);
         LoadLoaiNghiPhep();
     }
 
@@ -233,31 +233,27 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
 
     }
 
-    public void AddNhanVienVeSom() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_diaglog_add_vesom, null);
-        txtMaNV = view.findViewById(R.id.txtMaNV);
+    void AddNhanVienVeSom(View view) {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_vesom, null);
+        txtMaNV = view_bottom_sheet.findViewById(R.id.txtMaNV);
+        txtHoTen = view_bottom_sheet.findViewById(R.id.txtHoTen);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtGioRa = view_bottom_sheet.findViewById(R.id.txtGioRa);
+        txtGioVao = view_bottom_sheet.findViewById(R.id.txtGioVao);
+        txtLyDo = view_bottom_sheet.findViewById(R.id.txtLyDo);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
 
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
 
-        txtGhiChu = view.findViewById(R.id.txtGhiChu);
-        txtHoTen = view.findViewById(R.id.txtHoTen);
-        txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
-        txtGioRa = view.findViewById(R.id.txtGioRa);
-        txtGioVao = view.findViewById(R.id.txtGioVao);
-        txtLoaiNghiPhep = view.findViewById(R.id.txtLoaiNghiPhep);
-
-        btnLuu = view.findViewById(R.id.btnLuu);
-        btnDong = view.findViewById(R.id.btnDong);
-
-        builder.setView(view)
-                .setTitle("Thêm Về Sớm")
-                .setCancelable(false);
-
-        AlertDialog dialog = builder.create();
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
         dialog.show();
 
-        ShowLoaiNghiPhep(txtLoaiNghiPhep);
+
+        ShowLoaiNghiPhep(txtLyDo);
+
         txtMaNV.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -289,7 +285,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtGioRa.setText("Giờ ra: " + hourOfDay + ":" + minute);
+                        txtGioRa.setText(hourOfDay + ":" + minute);
                         StrGioRa = hourOfDay + ":" + minute;
                     }
                 }, mHour, mMinute, false);
@@ -308,7 +304,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtGioVao.setText("Giờ vào: " + hourOfDay + ":" + minute);
+                        txtGioVao.setText(hourOfDay + ":" + minute);
                         StrGioVao = hourOfDay + ":" + minute;
                     }
                 }, mHour, mMinute, false);
@@ -362,10 +358,11 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
             public void onClick(View view) {
                 dialog.setCancelable(true);
                 dialog.dismiss();
+                fab_menu.close(false);
             }
         });
-
     }
+
 
     public void ShowLoaiNghiPhep(TextView txtLoaiNghiPhep) {
         txtLoaiNghiPhep.setOnClickListener(new View.OnClickListener() {
@@ -385,7 +382,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         LoaiNghiPhep loaiNghiPhep = lstLoaiNghiPhep.get(i);
-                        txtLoaiNghiPhep.setText("Loại nghỉ phép: " + loaiNghiPhep.getLoainghiphep());
+                        txtLoaiNghiPhep.setText(loaiNghiPhep.getLoainghiphep());
                         StrMaloainghiphep = loaiNghiPhep.getMaloainghiphep();
                         dialogInterface.dismiss();
                     }

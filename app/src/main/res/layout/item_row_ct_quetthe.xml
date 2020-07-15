@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="30dp"
-       android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,15 +19,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
-
             android:orientation="horizontal"
-            android:weightSum="1.2">
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/txtNgayQuet"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.25"
+                android:layout_weight="0.3"
                 android:gravity="center|left"
                 android:text="12/02/2020"></TextView>
 
@@ -35,21 +34,22 @@
                 android:id="@+id/txtMaNV"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.2"
+                android:layout_weight="0.25"
                 android:gravity="center|left"
                 android:textStyle="bold"
                 android:text="002597"></TextView>
 
             <TextView
-                android:id="@+id/txtHoTen"
+                android:id="@+id/txtMaSoThe"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.55"
+                android:layout_weight="0.25"
                 android:gravity="center|left"
-                android:text="CÁI TRÍ MINH"></TextView>
+                android:textStyle="bold"
+                android:text="002597"></TextView>
 
             <TextView
-                android:id="@+id/txtLanQuet"
+                android:id="@+id/txtThoiGian"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"

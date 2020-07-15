@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -45,9 +46,11 @@ import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
 import com.example.myapplication.ui.ScanQR.ScanQR_Activity;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
@@ -90,9 +93,8 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
 //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
 
-    TextView txtHoTen, txtPhanXuong, txtLoaiNghiPhep, txtTuNgay, txtDenNgay, txtGioRa, txtGioVao;
-    EditText txtMaNV, txtGhiChu;
-    NoboButton btnLuu, btnDong;
+    TextInputEditText txtHoTen, txtPhanXuong, txtLoaiNghiPhep, txtTuNgay, txtDenNgay, txtGioRa, txtGioVao, txtMaNV, txtGhiChu;
+    Button btnLuu, btnDong;
 
     Integer mMinute = 0, mHour = 0, option = 1;
 
@@ -155,8 +157,8 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
     }
 
     @OnClick(R.id.btnThem)
-    public void ThemCongTac() {
-        AddNhanVienCongTac();
+    public void ThemCongTac(View view) {
+        AddNhanVienCongTac(view);
         LoadLoaiNghiPhep();
     }
 
@@ -214,30 +216,26 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
 
     }
 
-    public void AddNhanVienCongTac() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_diaglog_add_congtac, null);
-        txtMaNV = view.findViewById(R.id.txtMaNV);
+    public void AddNhanVienCongTac(View view) {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_congtac, null);
+        txtMaNV = view_bottom_sheet.findViewById(R.id.txtMaNV);
 
 
-        txtGhiChu = view.findViewById(R.id.txtGhiChu);
-        txtHoTen = view.findViewById(R.id.txtHoTen);
-        txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
-        txtGioRa = view.findViewById(R.id.txtGioRa);
-        txtTuNgay = view.findViewById(R.id.txtTuNgay);
-        txtGioVao = view.findViewById(R.id.txtGioVao);
-        txtDenNgay = view.findViewById(R.id.txtDenNgay);
-        txtLoaiNghiPhep = view.findViewById(R.id.txtLoaiNghiPhep);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
+        txtHoTen = view_bottom_sheet.findViewById(R.id.txtHoTen);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtGioRa = view_bottom_sheet.findViewById(R.id.txtGioRa);
+        txtTuNgay = view_bottom_sheet.findViewById(R.id.txtTuNgay);
+        txtGioVao = view_bottom_sheet.findViewById(R.id.txtGioVao);
+        txtDenNgay = view_bottom_sheet.findViewById(R.id.txtDenNgay);
+        txtLoaiNghiPhep = view_bottom_sheet.findViewById(R.id.txtLoaiNghiPhep);
 
-        btnLuu = view.findViewById(R.id.btnLuu);
-        btnDong = view.findViewById(R.id.btnDong);
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        builder.setView(view)
-                .setTitle("Thêm Công Tác")
-                .setCancelable(false);
-
-        AlertDialog dialog = builder.create();
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
         dialog.show();
 
         ShowLoaiNghiPhep(txtLoaiNghiPhep);
@@ -279,7 +277,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                                 String strDate = formatter.format(calendar.getTime());
 
-                                txtTuNgay.setText("Từ ngày: " + strDate);
+                                txtTuNgay.setText(strDate);
                                 //Lấy giá trị gửi lên server
                                 SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
                                 StrTuNgay = formatter2.format(calendar.getTime());
@@ -301,7 +299,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtGioRa.setText("Giờ ra: " + hourOfDay + ":" + minute);
+                        txtGioRa.setText(hourOfDay + ":" + minute);
                         StrGioRa = hourOfDay + ":" + minute;
                     }
                 }, mHour, mMinute, false);
@@ -328,7 +326,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                                 String strDate = formatter.format(calendar.getTime());
 
-                                txtDenNgay.setText("Từ ngày: " + strDate);
+                                txtDenNgay.setText(strDate);
                                 //Lấy giá trị gửi lên server
                                 SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
                                 StrDenNgay = formatter2.format(calendar.getTime());
@@ -350,7 +348,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtGioVao.setText("Giờ vào: " + hourOfDay + ":" + minute);
+                        txtGioVao.setText(hourOfDay + ":" + minute);
                         StrGioVao = hourOfDay + ":" + minute;
                     }
                 }, mHour, mMinute, false);
@@ -409,7 +407,6 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
 
                 dialog.setCancelable(true);
                 dialog.dismiss();
-
             }
         });
 
@@ -418,6 +415,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
             public void onClick(View view) {
                 dialog.setCancelable(true);
                 dialog.dismiss();
+                fab_menu.close(false);
             }
         });
 
@@ -441,7 +439,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         LoaiNghiPhep loaiNghiPhep = lstLoaiNghiPhep.get(i);
-                        txtLoaiNghiPhep.setText("Loại nghỉ phép: " + loaiNghiPhep.getLoainghiphep());
+                        txtLoaiNghiPhep.setText(loaiNghiPhep.getLoainghiphep());
                         StrMaloainghiphep = loaiNghiPhep.getMaloainghiphep();
                         dialogInterface.dismiss();
                     }

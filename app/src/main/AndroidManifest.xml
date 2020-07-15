@@ -31,6 +31,7 @@
         <activity android:name=".ui.CheDoBaoHiem.CheDoBaoHiem_Activity" />
         <activity android:name=".ui.nhanvien.HDLD_Activity" />
         <activity android:name=".ui.thaisan.NhatKyKhamThai_Activity" />
+        <activity android:name=".ui.NhatKyQuetThe.CTQuetTheMaNV_Activity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

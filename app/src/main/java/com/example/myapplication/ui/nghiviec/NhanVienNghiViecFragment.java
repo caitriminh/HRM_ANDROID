@@ -70,8 +70,8 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
 
-    String strMaNV="", strTuNgay="", strDenNgay="";
-    Integer option=1;
+    String strMaNV = "", strTuNgay = "", strDenNgay = "";
+    Integer option = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
         View rootView = inflater.inflate(R.layout.fragment_nhanvien_nghiviec, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         iRequestHttpCallback = this;
-        mContext=getActivity();
+        mContext = getActivity();
         return rootView;
     }
 
@@ -98,20 +98,6 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         LoadData();
-//        recycleView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
-//                recycleView, new ClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-////                nhatKyTop50 = lstNhatKy.get(position);
-////                String url = nhatKyTop50.getHinhanh2();
-////                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-//            }
-//
-//            @Override
-//            public void onLongClick(View view, int position) {
-//
-//            }
-//        }));
 
         //Làm mới dữ liệu
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -127,10 +113,10 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
         String TAG = "LOAD_NHANVIEN_NGHIVIEC";
 
         AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
-        request.params.put("option",option);
-        request.params.put("manv",strMaNV);
-        request.params.put("tungay",strTuNgay);
-        request.params.put("denngay",strDenNgay);
+        request.params.put("option", option);
+        request.params.put("manv", strMaNV);
+        request.params.put("tungay", strTuNgay);
+        request.params.put("denngay", strDenNgay);
         request.execute();
     }
 
@@ -145,7 +131,6 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             strMaNV = data.getStringExtra("result");
-            //MDToast.makeText(mContext, StrMaNV, Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
             option = 3;
             LoadData();
             fab_menu.close(false);
@@ -193,7 +178,6 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
-            JSONObject jsonObject = null;
             switch (TAG) {
                 case "LOAD_NHANVIEN_NGHIVIEC":
                     Gson gson = new Gson();
@@ -228,13 +212,9 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
         menuInflater.inflate(R.menu.menu_search_item, menu);
         menuInflater.inflate(R.menu.main, menu);
 
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView =
-                (SearchView) menu.findItem(R.id.menuSearch).getActionView();
-        //searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setQueryHint("Tìm kiếm...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

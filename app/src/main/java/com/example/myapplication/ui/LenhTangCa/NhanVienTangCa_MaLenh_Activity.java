@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,7 +39,9 @@ import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
 import com.example.myapplication.ui.ScanQR.ScanQR_Activity;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ornach.nobobutton.NoboButton;
@@ -80,9 +83,8 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
 
-    TextView txtMaLenh, txtPhanXuong, txtNhomCongViec, txtPhanXuongTC, txtHoTen;
-    EditText txtGhiChu, txtMaNV;
-    NoboButton btnLuu, btnDong;
+    TextInputEditText txtMaLenh, txtPhanXuong, txtNhomCongViec, txtPhanXuongTC, txtHoTen, txtGhiChu, txtMaNV;
+    Button btnLuu, btnDong;
 
     //swiperefresh
     @BindView(R.id.swiperefresh)
@@ -115,7 +117,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
             }
         }));
 
-        this.setTitle("Đăng Ký (" + Modules1.objLenhTangCa.getNgaytangca()+", " + Modules1.objLenhTangCa.getNhommay()+ ")");
+        this.setTitle("Đăng Ký (" + Modules1.objLenhTangCa.getNgaytangca() + ", " + Modules1.objLenhTangCa.getNhommay() + ")");
         //Làm mới dữ liệu
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -176,29 +178,25 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
         request.execute();
     }
 
-    public void AddNhanVienTangCa() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_diaglog_add_dangky_tangca, null);
-        txtMaLenh = view.findViewById(R.id.txtMaLenh);
-        txtGhiChu = view.findViewById(R.id.txtGhiChu);
-        txtPhanXuong = view.findViewById(R.id.txtPhanXuong);
-        txtPhanXuongTC = view.findViewById(R.id.txtPhanXuongTC);
-        txtMaNV = view.findViewById(R.id.txtMaNV);
-        txtHoTen = view.findViewById(R.id.txtHoTen);
-        txtNhomCongViec = view.findViewById(R.id.txtNhomCongViec);
+    public void AddNhanVienTangCa(View view) {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_dangky_tangca, null);
+        txtMaLenh = view_bottom_sheet.findViewById(R.id.txtMaLenh);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtPhanXuongTC = view_bottom_sheet.findViewById(R.id.txtPhanXuongTC);
+        txtMaNV = view_bottom_sheet.findViewById(R.id.txtMaNV);
+        txtHoTen = view_bottom_sheet.findViewById(R.id.txtHoTen);
+        txtNhomCongViec = view_bottom_sheet.findViewById(R.id.txtNhomCongViec);
 
 
-        btnLuu = view.findViewById(R.id.btnLuu);
-        btnDong = view.findViewById(R.id.btnDong);
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        txtMaLenh.setText("Mã lệnh: " + Modules1.objLenhTangCa.getMalenh());
-        txtPhanXuongTC.setText("Nơi làm việc: " + Modules1.objLenhTangCa.getTenpx());
-        builder.setView(view)
-                .setTitle("Đăng Ký Tăng Ca")
-                .setCancelable(false);
-
-        AlertDialog dialog = builder.create();
+        txtMaLenh.setText(Modules1.objLenhTangCa.getMalenh());
+        txtPhanXuongTC.setText(Modules1.objLenhTangCa.getTenpx());
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
         dialog.show();
 
         ShowLoaiNhomMay(txtNhomCongViec);
@@ -307,8 +305,8 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
 
 
     @OnClick(R.id.btnThem)
-    public void ThemLenhTangCa() {
-        AddNhanVienTangCa();
+    public void ThemLenhTangCa(View view) {
+        AddNhanVienTangCa(view);
         LoadNhomMay();
 
     }
@@ -323,7 +321,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            if(resultCode ==101){
+            if (resultCode == 101) {
                 strMaNV = data.getStringExtra("result");
                 if (strMaNV.isEmpty()) {
                     fab_menu.close(false);
@@ -346,7 +344,6 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
 
         }
     }
-
 
 
     public void LoadThongTinNhanVien(String manv) {
@@ -400,7 +397,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                         if (status.equals("OK")) {
                             MDToast.makeText(this, "Đã đăng ký thành công.", Toast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
                             LoadData();
-
+                            fab_menu.close(false);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

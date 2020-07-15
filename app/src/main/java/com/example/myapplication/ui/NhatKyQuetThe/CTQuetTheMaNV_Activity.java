@@ -2,10 +2,7 @@ package com.example.myapplication.ui.NhatKyQuetThe;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -15,7 +12,6 @@ import androidx.core.util.Pair;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 
 import com.example.myapplication.Adapter.Adapter_NhatKyQuetThe;
 import com.example.myapplication.AsyncPostHttpRequest;
@@ -31,9 +27,6 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-//import com.r0adkll.slidr.Slidr;
-//import com.r0adkll.slidr.model.SlidrConfig;
-//import com.r0adkll.slidr.model.SlidrPosition;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -53,7 +46,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class NhatKyQuetThe_MaNV_Activity extends AppCompatActivity implements IRequestHttpCallback {
+
+public class CTQuetTheMaNV_Activity extends AppCompatActivity implements IRequestHttpCallback {
 
     IRequestHttpCallback iRequestHttpCallback;
     ArrayList<NhatKyQuetThe> lstNhatKyQuetThe;
@@ -103,7 +97,7 @@ public class NhatKyQuetThe_MaNV_Activity extends AppCompatActivity implements IR
             }
         }));
 
-        this.setTitle("Nhật Ký Quét Thẻ");
+        this.setTitle("Chi Tiết Quét Thẻ");
         //Làm mới dữ liệu
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -149,14 +143,12 @@ public class NhatKyQuetThe_MaNV_Activity extends AppCompatActivity implements IR
     }
 
     public void LoadData() {
-        String url = Modules1.BASE_URL + "load_nhatky_quetthe";
-        String TAG = "LOAD_NHATKYQUETTHE";
+        String url = Modules1.BASE_URL + "load_chitiet_quetthe";
+        String TAG = "LOAD_CHITIET_QUETTHE";
 
         AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, this, TAG);
-        request.params.put("option", option);
-        request.params.put("tungay", strTuNgay);
-        request.params.put("denngay", strDenNgay);
-        request.params.put("manv", Modules1.strMaNV);
+        request.params.put("ngayquet", Modules1.objNhatKyQuetThe.getNgayquet());
+        request.params.put("manv", Modules1.objNhatKyQuetThe.getManv());
         request.execute();
         //Làm mới dữ liệu
         swiperefresh.setRefreshing(false);
@@ -204,7 +196,7 @@ public class NhatKyQuetThe_MaNV_Activity extends AppCompatActivity implements IR
         JSONObject jsonObject = null;
         if (isSuccess) {
             switch (TAG) {
-                case "LOAD_NHATKYQUETTHE":
+                case "LOAD_CHITIET_QUETTHE":
                     Gson gson = new Gson();
                     TypeToken<List<NhatKyQuetThe>> token = new TypeToken<List<NhatKyQuetThe>>() {
                     };

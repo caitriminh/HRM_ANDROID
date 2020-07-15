@@ -12,12 +12,21 @@ import com.google.gson.annotations.SerializedName;
         @SerializedName("manv")
         @Expose
         private String manv;
+
+        @SerializedName("masothe")
+        @Expose
+        private String masothe;
+
         @SerializedName("tennv")
         @Expose
         private String tennv;
         @SerializedName("ngayquet")
         @Expose
         private String ngayquet;
+        @SerializedName("lanquet")
+        @Expose
+        private Integer lanquet;
+
         @SerializedName("thoigian")
         @Expose
         private String thoigian;
@@ -38,6 +47,14 @@ import com.google.gson.annotations.SerializedName;
             this.manv = manv;
         }
 
+        public String getMasothe() {
+            return masothe;
+        }
+
+        public void setMasothe(String masothe) {
+            this.masothe = masothe;
+        }
+
         public String getTennv() {
             return tennv;
         }
@@ -52,6 +69,14 @@ import com.google.gson.annotations.SerializedName;
 
         public void setNgayquet(String ngayquet) {
             this.ngayquet = ngayquet;
+        }
+
+        public Integer getLanquet() {
+            return lanquet;
+        }
+
+        public void setLanquet(Integer lanquet) {
+            this.lanquet = lanquet;
         }
 
         public String getThoigian() {

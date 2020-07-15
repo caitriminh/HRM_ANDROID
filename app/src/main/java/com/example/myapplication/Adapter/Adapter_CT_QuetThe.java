@@ -4,19 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Model.NhanVien;
 import com.example.myapplication.Model.NhatKyQuetThe;
-import com.example.myapplication.Model.VeSom;
 import com.example.myapplication.R;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +20,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class Adapter_NhatKyQuetThe extends RecyclerView.Adapter<Adapter_NhatKyQuetThe.RecyclerViewHolder> {
+public class Adapter_CT_QuetThe extends RecyclerView.Adapter<Adapter_CT_QuetThe.RecyclerViewHolder> {
     private Context mContext;
     private List<NhatKyQuetThe> data = new ArrayList<>();
-    private List<NhatKyQuetThe> temp = new ArrayList<>();
     private Unbinder unbinder;
 
-    public Adapter_NhatKyQuetThe(Context mContext, List<NhatKyQuetThe> data) {
+    public Adapter_CT_QuetThe(Context mContext, List<NhatKyQuetThe> data) {
         this.data = data;
-        temp.addAll(data);
         this.mContext = mContext;
     }
 
@@ -42,7 +34,7 @@ public class Adapter_NhatKyQuetThe extends RecyclerView.Adapter<Adapter_NhatKyQu
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_row_nhatkyquetthe, parent, false);
+        View view = inflater.inflate(R.layout.item_row_ct_quetthe, parent, false);
 
         return new RecyclerViewHolder(view);
     }
@@ -53,8 +45,8 @@ public class Adapter_NhatKyQuetThe extends RecyclerView.Adapter<Adapter_NhatKyQu
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         holder.txtNgayQuet.setText(data.get(position).getNgayquet());
         holder.txtMaNV.setText(data.get(position).getManv());
-        holder.txtHoTen.setText(data.get(position).getTennv());
-        holder.txtLanQuet.setText(data.get(position).getLanquet().toString());
+        holder.txtMaSoThe.setText(data.get(position).getMasothe());
+        holder.txtThoiGian.setText(data.get(position).getThoigian());
     }
 
     @Override
@@ -70,11 +62,11 @@ public class Adapter_NhatKyQuetThe extends RecyclerView.Adapter<Adapter_NhatKyQu
         @BindView(R.id.txtMaNV)
         TextView txtMaNV;
 
-        @BindView(R.id.txtHoTen)
-        TextView txtHoTen;
+        @BindView(R.id.txtMaSoThe)
+        TextView txtMaSoThe;
 
-        @BindView(R.id.txtLanQuet)
-        TextView txtLanQuet;
+        @BindView(R.id.txtThoiGian)
+        TextView txtThoiGian;
 
 
         public RecyclerViewHolder(View itemView) {
@@ -83,20 +75,4 @@ public class Adapter_NhatKyQuetThe extends RecyclerView.Adapter<Adapter_NhatKyQu
         }
     }
 
-    public void filter(String keys) {
-        data.clear();
-        String charText = keys.toLowerCase(Locale.getDefault());
-        if (charText.length() == 0) {
-            data.addAll(temp);
-        } else {
-            for (NhatKyQuetThe nhatKyQuetThe : temp) {
-                if (String.valueOf(nhatKyQuetThe.getTennv()).toLowerCase(Locale.getDefault()).contains(charText)
-                        || String.valueOf(nhatKyQuetThe.getManv()).toLowerCase(Locale.getDefault()).contains(charText)
-                ) {
-                    data.add(nhatKyQuetThe);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
 }

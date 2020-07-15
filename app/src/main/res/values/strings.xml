@@ -25,6 +25,7 @@
     <string name="menu_phepnam">Phép năm</string>
 
     <string name="menu_quetthe">Nhật ký quét thẻ</string>
+    <string name="menu_khongquetthe">Nhật ký không quét thẻ</string>
     <string name="menu_diemdanh">Điểm danh</string>
 
     <string name="menu_lenhtangca">Lệnh tăng ca</string>

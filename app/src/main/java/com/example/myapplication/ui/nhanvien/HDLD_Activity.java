@@ -2,6 +2,7 @@ package com.example.myapplication.ui.nhanvien;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.example.myapplication.Model.NghiPhep;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerTouchListener;
+import com.example.myapplication.ui.PhuLucHopDong.PhuLucHopDong_Activity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
@@ -66,7 +68,9 @@ public class HDLD_Activity extends AppCompatActivity implements IRequestHttpCall
 
             @Override
             public void onClick(View view, int position) {
-
+                Modules1.objHopDong = lstHDLD.get(position);
+                Intent intent = new Intent(mContext, PhuLucHopDong_Activity.class);
+                mContext.startActivity(intent);
             }
 
             @Override
