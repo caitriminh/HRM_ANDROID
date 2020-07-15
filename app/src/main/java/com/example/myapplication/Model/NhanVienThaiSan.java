@@ -8,13 +8,21 @@ public class NhanVienThaiSan {
     @Expose
     private String manv;
 
+    @SerializedName("manv2")
+    @Expose
+    private String manv2;
+
     @SerializedName("tennv")
     @Expose
     private String tennv;
 
-    @SerializedName("gioitinh")
+    @SerializedName("lanmangthai")
     @Expose
-    private String gioitinh;
+    private Integer lanmangthai;
+
+    @SerializedName("lanmangthai2")
+    @Expose
+    private String lanmangthai2;
 
     @SerializedName("ngaynghits")
     @Expose
@@ -36,14 +44,13 @@ public class NhanVienThaiSan {
     @Expose
     private String tenchuyen;
 
-    @SerializedName("tento")
-    @Expose
-    private String tento;
-
     @SerializedName("hinh")
     @Expose
     private String hinh;
 
+    @SerializedName("matrangthai")
+    @Expose
+    private String matrangthai;
 
     public String getManv() {
         return manv;
@@ -51,6 +58,14 @@ public class NhanVienThaiSan {
 
     public void setManv(String manv) {
         this.manv = manv;
+    }
+
+    public String getManv2() {
+        return manv2;
+    }
+
+    public void setManv2(String manv2) {
+        this.manv2 = manv2;
     }
 
     public String getTennv() {
@@ -61,14 +76,21 @@ public class NhanVienThaiSan {
         this.tennv = tennv;
     }
 
-    public String getGioitinh() {
-        return gioitinh;
+    public Integer getLanmangthai() {
+        return lanmangthai;
     }
 
-    public void setGioitinh(String gioitinh) {
-        this.gioitinh = gioitinh;
+    public void setLanmangthai(Integer lanmangthai) {
+        this.lanmangthai = lanmangthai;
     }
 
+    public String getLanmangthai2() {
+        return lanmangthai2;
+    }
+
+    public void setLanmangthai2(String lanmangthai2) {
+        this.lanmangthai2 = lanmangthai2;
+    }
 
     public String getNgaynghits() {
         return ngaynghits;
@@ -110,19 +132,20 @@ public class NhanVienThaiSan {
         this.tenchuyen = tenchuyen;
     }
 
-    public String getTento() {
-        return tento;
-    }
-
-    public void setTento(String tento) {
-        this.tento = tento;
-    }
     public String getHinh() {
         return hinh;
     }
 
     public void setHinh(String hinh) {
         this.hinh = hinh;
+    }
+
+    public String getMatrangthai() {
+        return matrangthai;
+    }
+
+    public void setMatrangthai(String matrangthai) {
+        this.matrangthai = matrangthai;
     }
 
 

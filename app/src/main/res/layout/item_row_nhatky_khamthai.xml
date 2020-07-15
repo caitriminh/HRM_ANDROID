@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:orientation="horizontal">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:clickable="true"
+
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.0px"
+        android:foreground="?android:attr/selectableItemBackground"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/txtNgayKhamThai"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.22"
+                android:gravity="center|left"
+                android:text="12/02/2020"></TextView>
+
+            <TextView
+                android:id="@+id/txtSoTuan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center|center_vertical"
+                android:textStyle="bold"
+                android:text="20"></TextView>
+
+            <TextView
+                android:id="@+id/txtNgayDu25Tuan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.22"
+                android:gravity="center|left"
+                android:text="25/12/2020"></TextView>
+
+            <TextView
+                android:id="@+id/txtGhiChu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.43"
+                android:gravity="center|left"
+                android:text="15:30"></TextView>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -202,7 +202,7 @@ public class NhanVienNghiViecFragment extends Fragment implements IRequestHttpCa
                     List<NhanVienNghiViec> nhanVienNghiViecs = gson.fromJson(responseText, token.getType());
                     lstNhanVienNghiViec = new ArrayList<NhanVienNghiViec>();
                     lstNhanVienNghiViec.addAll(nhanVienNghiViecs);
-                    adapter = new Adapter_NhanVienNghiViec(getActivity(), lstNhanVienNghiViec);
+                    adapter = new Adapter_NhanVienNghiViec(getActivity(), lstNhanVienNghiViec, recycleView);
                     recycleView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
                     recycleView.setAdapter(adapter);
 

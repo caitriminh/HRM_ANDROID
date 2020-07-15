@@ -8,6 +8,10 @@ public class NhanVienNghiViec {
     @Expose
     private String manv;
 
+    @SerializedName("manv2")
+    @Expose
+    private String manv2;
+
     @SerializedName("tennv")
     @Expose
     private String tennv;
@@ -51,6 +55,14 @@ public class NhanVienNghiViec {
 
     public void setManv(String manv) {
         this.manv = manv;
+    }
+
+    public String getManv2() {
+        return manv2;
+    }
+
+    public void setManv2(String manv2) {
+        this.manv2 = manv2;
     }
 
     public String getTennv() {

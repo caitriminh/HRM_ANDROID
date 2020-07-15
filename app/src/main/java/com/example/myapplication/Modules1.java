@@ -6,6 +6,7 @@ import com.android.volley.RequestQueue;
 import com.example.myapplication.Model.HopDongLaoDong;
 import com.example.myapplication.Model.LenhTangCa;
 import com.example.myapplication.Model.NhanVien;
+import com.example.myapplication.Model.NhanVienThaiSan;
 import com.example.myapplication.Model.PhepNam;
 import com.example.myapplication.Model.VeSom;
 
@@ -19,6 +20,7 @@ public class Modules1 {
     public static LenhTangCa objLenhTangCa;
     public static HopDongLaoDong objHopDong;
     public static PhepNam objPhepNam;
+    public static NhanVienThaiSan objNhanVienThaiSan;
     public static VeSom objVeSom;
     public static String strMaNV;
 

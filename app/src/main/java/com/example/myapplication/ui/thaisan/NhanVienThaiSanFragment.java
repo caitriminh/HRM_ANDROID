@@ -108,12 +108,11 @@ public class NhanVienThaiSanFragment extends Fragment implements IRequestHttpCal
     }
 
     public void LoadData() {
-//        shimmerFrameLayout.setVisibility(View.VISIBLE);
-//        shimmerFrameLayout.startShimmer();
         String url = Modules1.BASE_URL + "load_nhanvien_thaisan_android";
         String TAG = "LOAD_NHANVIEN_THAISAN";
 
         AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.params.put("option", 1);
         request.execute();
     }
 
@@ -130,7 +129,8 @@ public class NhanVienThaiSanFragment extends Fragment implements IRequestHttpCal
                     List<NhanVienThaiSan> nhanVienThaiSans = gson.fromJson(responseText, token.getType());
                     lstNhanVienThaiSan = new ArrayList<NhanVienThaiSan>();
                     lstNhanVienThaiSan.addAll(nhanVienThaiSans);
-                    adapter = new Adapter_NhanVienThaiSan(getActivity(), lstNhanVienThaiSan);
+                    // adapter = new Adapter_NhanVienThaiSan(getActivity(), lstNhanVienThaiSan);
+                    adapter = new Adapter_NhanVienThaiSan(getActivity(), lstNhanVienThaiSan, recycleView);
                     recycleView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
                     recycleView.setAdapter(adapter);
 

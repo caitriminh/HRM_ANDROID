@@ -9,7 +9,6 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:theme="@style/AppTheme"
     cardview:cardCornerRadius="4dp">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,16 +41,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.1"
-                android:textStyle="bold"
-                android:text="Mã nhân viên: 002597"></TextView>
+                android:text="Mã NV: 002597"
+                android:textStyle="bold"></TextView>
 
             <TextView
                 android:id="@+id/txtHoTen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.1"
-                android:textStyle="bold"
-                android:text="CÁI TRÍ MINH"></TextView>
+                android:text="CÁI TRÍ MINH"
+                android:textStyle="bold"></TextView>
 
             <TextView
                 android:id="@+id/txtNgayNghiTS"
@@ -72,33 +71,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.1"
-                android:textStyle="bold"
-                android:text="KẾ TOÁN TÀI CHÍNH"></TextView>
+                android:text="KẾ TOÁN TÀI CHÍNH"
+                android:textStyle="bold"></TextView>
 
             <TextView
                 android:id="@+id/txtChuyen"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.1"
-                android:textStyle="bold"
-                android:text="Kế toán"></TextView>
-            <TextView
-                android:id="@+id/txtTo"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.1"
-                android:textStyle="bold"
-                android:text="Kế toán"></TextView>
+                android:text="Kế toán"
+                android:textStyle="bold"></TextView>
 
             <TextView
-                android:id="@+id/txtTrangThai"
+                android:id="@+id/txtLanMangThai"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.1"
-                android:textStyle="bold"
-                android:text="Trạng thái: Nghỉ thai sản"></TextView>
+                android:text="Lần mang thai: 1"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.1"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtTrangThai"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:text="Trạng thái: Nghỉ thai sản"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtMenuOpTion"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:textSize="18dp"
+                    android:text="&#8942;"
+                    android:gravity="center|center_vertical"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>
