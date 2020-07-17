@@ -119,18 +119,13 @@ public class HopDongLaoDongFragment extends Fragment implements IRequestHttpCall
 
             @Override
             public void onLongClick(View view, int position) {
-                HopDongLaoDong hopDongLaoDong = (HopDongLaoDong) lstHopDongLaoDong.get(position);
+                HopDongLaoDong hopDongLaoDong = lstHopDongLaoDong.get(position);
                 Delete_HopDongLaoDong(hopDongLaoDong, position);
             }
         }));
 
         //Làm mới dữ liệu
-        swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                LoadData();
-            }
-        });
+        swiperefresh.setOnRefreshListener(() -> LoadData());
     }
 
     @OnClick(R.id.btnQR)
@@ -167,18 +162,14 @@ public class HopDongLaoDongFragment extends Fragment implements IRequestHttpCall
         MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
         MaterialDatePicker picker = builder.setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar).build();
         picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-        picker.addOnNegativeButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                picker.dismiss();
-                fab_menu.close(false);
-            }
+        picker.addOnNegativeButtonClickListener(view -> {
+            picker.dismiss();
+            fab_menu.close(false);
         });
 
         picker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                Object data = selection;
                 Pair<Long, Long> result = (Pair<Long, Long>) selection;
                 long startDate = result.first;
                 long endDate = result.second;
@@ -277,13 +268,10 @@ public class HopDongLaoDongFragment extends Fragment implements IRequestHttpCall
         menuInflater.inflate(R.menu.menu_search_item, menu);
         menuInflater.inflate(R.menu.main, menu);
 
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView =
-                (SearchView) menu.findItem(R.id.menuSearch).getActionView();
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
         //searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setQueryHint("Tìm kiếm...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

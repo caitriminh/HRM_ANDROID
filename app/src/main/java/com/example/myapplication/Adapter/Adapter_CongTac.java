@@ -236,7 +236,7 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                     .build();
             mBottomSheetDialog.show();
         } else if (congTac.getStatus_quanly().equals("YES")) {
-            title = "Bạn có muốn thu hồi xác nhận đơn xin nghi phép nhân viên (" + congTac.getTennv() + ") này không?";
+
             title = "Bạn có muốn thu hồi phê duyệt phiếu đăng ký về sớm của nhân viên (" + congTac.getTennv() + ") này không?";
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext)
                     .setTitle("Thu Hồi")
