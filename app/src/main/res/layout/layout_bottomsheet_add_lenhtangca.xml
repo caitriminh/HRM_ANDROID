@@ -151,6 +151,8 @@
             android:background="@color/colorPrimary"
             android:paddingRight="8dp"
             android:text="LƯU"
+            app:icon="@drawable/ic_luu"
+            app:iconGravity="textStart"
             android:textColor="@color/colorWhite" />
 
         <Button
@@ -160,7 +162,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_weight="0.5"
-
+            app:icon="@drawable/ic_close"
+            app:iconTint="#ffffff"
+            app:iconGravity="textStart"
             android:backgroundTint="@color/colorAccent"
             android:text="Đóng"
             android:textColor="@color/colorWhite" />

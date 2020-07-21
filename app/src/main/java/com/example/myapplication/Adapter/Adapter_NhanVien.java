@@ -30,6 +30,7 @@ import com.example.myapplication.Helper.ImageHelper;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.Model.CheDoBaoHiem;
 import com.example.myapplication.Model.CongTac;
+import com.example.myapplication.Model.DangKyNhanVien;
 import com.example.myapplication.Model.NhanVien;
 import com.example.myapplication.Model.NhanVienNghiViec;
 import com.example.myapplication.Modules1;
@@ -41,6 +42,7 @@ import com.example.myapplication.ui.PhepNam.CTPhepNam_Activity;
 import com.example.myapplication.ui.VeSom.VeSom_Activity;
 import com.example.myapplication.ui.nghiphep.NghiPhep_MaNV_Activity;
 import com.example.myapplication.ui.nhanvien.HDLD_Activity;
+import com.example.myapplication.ui.nhanvien.NhanVienQuanLy_Activity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
@@ -138,7 +140,8 @@ public class Adapter_NhanVien extends RecyclerView.Adapter<Adapter_NhanVien.Recy
                         .addItem(new PowerMenuItem("Phép năm", R.drawable.ic_menu_phepnam2, "PHEPNAM")) // add an item.
                         .addItem(new PowerMenuItem("Nhật ký quét thẻ", R.drawable.ic_menu_quetthe2, "QUETTHE")) // aad an item list.
                         .addItem(new PowerMenuItem("Nhật ký nghỉ phép", R.drawable.ic_menu_nghiphep, "NGHIPHEP")) // aad an item list.
-                        .addItem(new PowerMenuItem("Hợp đồng lao động", R.drawable.ic_menu_hopdong2, "HOPDONG")) // aad an item list.
+                        .addItem(new PowerMenuItem("Hợp đồng lao động", R.drawable.ic_menu_hopdong2, "HOPDONG"))
+                        .addItem(new PowerMenuItem("Quản lý nhân viên", R.drawable.ic_user, "QLNHANVIEN"))
                         .addItem(new PowerMenuItem("Xem ảnh", R.drawable.ic_menu_xemanh, "XEMANH")) // aad an item list.
                         .addItem(new PowerMenuItem("Xóa", R.drawable.ic_delete, "XOA")) // aad an item list.
                         .setAnimation(MenuAnimation.ELASTIC_CENTER)
@@ -177,6 +180,10 @@ public class Adapter_NhanVien extends RecyclerView.Adapter<Adapter_NhanVien.Recy
                 case "NGHIPHEP":
                     Intent intent_nghiphep = new Intent(mContext, NghiPhep_MaNV_Activity.class);
                     mContext.startActivity(intent_nghiphep);
+                    break;
+                case "QLNHANVIEN":
+                    Intent intentQL = new Intent(mContext, NhanVienQuanLy_Activity.class);
+                    mContext.startActivity(intentQL);
                     break;
                 case "HOPDONG":
                     Intent intentHDLD = new Intent(mContext, HDLD_Activity.class);

@@ -153,6 +153,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
         request.params.put("tungay", StrTuNgay);
         request.params.put("denngay", StrDenNgay);
         request.params.put("manv", StrMaNV);
+        request.params.put("id", 0);
         request.execute();
     }
 
@@ -233,7 +234,7 @@ public class CongTacFragment extends Fragment implements IRequestHttpCallback {
         btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
         btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
         dialog.setContentView(view_bottom_sheet);
         dialog.setCancelable(false);
         dialog.show();

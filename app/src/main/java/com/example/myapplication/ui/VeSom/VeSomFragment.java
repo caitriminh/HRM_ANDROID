@@ -78,27 +78,18 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
     private Unbinder unbinder;
     @BindView(R.id.recycleView)
     RecyclerView recycleView;
-
     @BindView(R.id.menu_list)
     FloatingActionMenu fab_menu;
-
     //swiperefresh
     @BindView(R.id.swiperefresh)
     SwipeRefreshLayout swiperefresh;
     Context mContext;
-
     String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
     Integer mMinute = 0, mHour = 0, option = 1;
-
     TextInputEditText txtGioRa, txtMaNV, txtHoTen, txtPhanXuong, txtGioVao, txtGhiChu, txtLyDo;
-
     Button btnLuu, btnDong;
-    //    TextView txtHoTen, txtPhanXuong, txtNgayDangKy, txtLoaiNghiPhep, txtGioRa, txtGioVao;
-//    EditText txtMaNV, txtGhiChu;
-    //   NoboButton btnLuu, btnDong;
 //    @BindView(R.id.shimmer_view_container)
 //    ShimmerFrameLayout shimmerFrameLayout;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -246,7 +237,7 @@ public class VeSomFragment extends Fragment implements IRequestHttpCallback {
         btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
         btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
 
-        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
         dialog.setContentView(view_bottom_sheet);
         dialog.setCancelable(false);
         dialog.show();

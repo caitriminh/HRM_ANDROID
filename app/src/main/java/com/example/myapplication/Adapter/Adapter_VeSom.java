@@ -1,6 +1,8 @@
 package com.example.myapplication.Adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,14 +10,18 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,14 +32,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.AsyncPostHttpRequest;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.Model.CongTac;
+import com.example.myapplication.Model.LoaiNghiPhep;
 import com.example.myapplication.Model.NghiPhep;
 import com.example.myapplication.Model.VeSom;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
 import com.example.myapplication.ui.VeSom.VeSom_Activity;
 import com.example.myapplication.ui.nghiphep.NghiPhep_MaNV_Activity;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -50,6 +60,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -57,17 +68,23 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.internal.operators.maybe.MaybeCallbackObserver;
 
 public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerViewHolder> implements IRequestHttpCallback {
     private Context mContext;
     private List<VeSom> data = new ArrayList<>();
     private List<VeSom> temp = new ArrayList<>();
+    ArrayList<LoaiNghiPhep> lstLoaiNghiPhep;
     IRequestHttpCallback iRequestHttpCallback;
-
     VeSom veSom;
     private Unbinder unbinder;
     PowerMenu powerMenu;
     Integer option = 1, position_item = -1;
+    String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
+    Integer mMinute = 0, mHour = 0;
+    TextInputEditText txtGioRa, txtMaNV, txtHoTen, txtPhanXuong, txtGioVao, txtGhiChu, txtLyDo;
+    Button btnLuu, btnDong;
+    View view;
 
     public Adapter_VeSom(Context mContext, List<VeSom> data) {
         this.data = data;
@@ -80,7 +97,7 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.cardview_item_vesom, parent, false);
+        view = inflater.inflate(R.layout.cardview_item_vesom, parent, false);
 
         return new RecyclerViewHolder(view);
     }
@@ -135,8 +152,9 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
                 powerMenu = new PowerMenu.Builder(mContext)
                         // .setHeaderView(R.layout.layout_dialog_header)
                         .addItem(new PowerMenuItem("Xác nhận", R.drawable.ic_baseline_security_24, "XACNHAN")) // add an item.
-                        .addItem(new PowerMenuItem("Phê duyệt", R.drawable.ic_menu_pheduyet, "PHEDUYET")) // aad an item list.
-                        .addItem(new PowerMenuItem("Nhật ký về sớm", R.drawable.ic_ct_nghiphep, "NHATKY")) // aad an item list.
+                        .addItem(new PowerMenuItem("Phê duyệt", R.drawable.ic_menu_pheduyet, "PHEDUYET"))
+                        .addItem(new PowerMenuItem("Chỉnh sửa", R.drawable.ic_chinhsua, "CHINHSUA"))
+                        .addItem(new PowerMenuItem("Nhật ký về sớm", R.drawable.ic_ct_nghiphep, "NHATKY"))
                         .addItem(new PowerMenuItem("Xem ảnh", R.drawable.ic_menu_xemanh, "XEMANH")) // aad an item list.
                         .addItem(new PowerMenuItem("Xóa", R.drawable.ic_delete, "XOA")) // aad an item list.
                         .setAnimation(MenuAnimation.ELASTIC_CENTER)
@@ -159,10 +177,47 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
         });
     }
 
+    public void ShowLoaiNghiPhep(TextView txtLoaiNghiPhep) {
+        txtLoaiNghiPhep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Chọn loại nghỉ phép");
+                builder.setCancelable(false);
+                String[] arrayLoaiNghiPhep = new String[lstLoaiNghiPhep.size()];
+                int i = 0;
+                for (LoaiNghiPhep loaiNghiPhep : lstLoaiNghiPhep) {
+                    arrayLoaiNghiPhep[i] = loaiNghiPhep.getLoainghiphep();
+                    i++;
+                }
+                ;
+                builder.setSingleChoiceItems(arrayLoaiNghiPhep, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        LoaiNghiPhep loaiNghiPhep = lstLoaiNghiPhep.get(i);
+                        txtLoaiNghiPhep.setText(loaiNghiPhep.getLoainghiphep());
+                        StrMaloainghiphep = loaiNghiPhep.getMaloainghiphep();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void LoadLoaiNghiPhep() {
+        String url = Modules1.BASE_URL + "load_loainghiphep";
+        String TAG = "LOAD_LOAINGHIPHEP";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.params.put("option", 3);
+        request.execute();
+    }
+
     private OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = new OnMenuItemClickListener<PowerMenuItem>() {
         @Override
         public void onItemClick(int position, PowerMenuItem item) {
-            VeSom veSom = data.get(position_item);
+            veSom = data.get(position_item);
             String TAG = item.getTag().toString();
             switch (TAG) {
                 case "XACNHAN":
@@ -170,6 +225,15 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
                         MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
                     } else {
                         XacNhan_VeSom(veSom, position_item);
+                    }
+                    break;
+                case "CHINHSUA":
+                    if (veSom.getStatus_nhansu().equals("YES") || veSom.getStatus_nhansu().equals("NO") || veSom.getStatus_quanly().equals("YES") || veSom.getStatus_quanly().equals("NO") ) {
+                        MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + veSom.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    } else {
+                        LoadThongTinNhanVien();
+                        LoadLoaiNghiPhep();
+                        SuaNhanVienVeSom();
                     }
                     break;
                 case "PHEDUYET":
@@ -405,13 +469,136 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
         request.execute();
     }
 
+    public void LoadThongTinNhanVien() {
+        String url = Modules1.BASE_URL + "getthongtin_nghiphep_vesom_congtac";
+        String TAG = "LOAD_THONGTIN";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.params.put("id", veSom.getId());
+        request.execute();
+    }
+
+    void SuaNhanVienVeSom() {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_vesom, null);
+        txtMaNV = view_bottom_sheet.findViewById(R.id.txtMaNV);
+        txtHoTen = view_bottom_sheet.findViewById(R.id.txtHoTen);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtGioRa = view_bottom_sheet.findViewById(R.id.txtGioRa);
+        txtGioVao = view_bottom_sheet.findViewById(R.id.txtGioVao);
+        txtLyDo = view_bottom_sheet.findViewById(R.id.txtLyDo);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
+
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
+
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
+        dialog.show();
+
+        ShowLoaiNghiPhep(txtLyDo);
+
+        txtGioRa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        txtGioRa.setText(hourOfDay + ":" + minute);
+                        StrGioRa = hourOfDay + ":" + minute;
+                    }
+                }, mHour, mMinute, false);
+                timePickerDialog.show();
+
+            }
+        });
+
+        txtGioVao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        txtGioVao.setText(hourOfDay + ":" + minute);
+                        StrGioVao = hourOfDay + ":" + minute;
+                    }
+                }, mHour, mMinute, false);
+                timePickerDialog.show();
+
+            }
+        });
+
+        btnLuu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (txtMaNV.getText().equals("")) {
+                    MDToast.makeText(mContext, "Vui lòng nhập vào mã nhân viên.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrMaloainghiphep.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng chọn loại về sớm", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrGioRa.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng nhập vào giờ ra", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                String url = Modules1.BASE_URL + "update_nhanvien_nghiphep_vesom_congtac";
+                String TAG = "UPDATE_NHANVIEN_VESOM";
+                AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+                //Gửi user va Pass len server
+                request.params.put("option", 3);
+                request.params.put("id", veSom.getId());
+                request.params.put("maloainghiphep", StrMaloainghiphep);
+                request.params.put("tungay", StrTuNgay + " " + StrGioRa);
+                request.params.put("denngay", StrDenNgay + " " + StrGioVao);
+                request.params.put("songay", 0);
+                request.params.put("ghichu", txtGhiChu.getText().toString());
+                request.params.put("nguoitd2", Modules1.tendangnhap);
+                request.extraData.put("position", position_item);
+                request.execute();
+                dialog.setCancelable(true);
+                dialog.dismiss();
+            }
+        });
+
+        btnDong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.setCancelable(true);
+                dialog.dismiss();
+            }
+        });
+    }
+
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
             JSONObject jsonObject = null;
-            int position = Integer.parseInt(extraData.get("position").toString());
             switch (TAG) {
+                case "UPDATE_NHANVIEN_VESOM":
+                    int position4 = Integer.parseInt(extraData.get("position").toString());
+                    Gson gUpdate = new Gson();
+                    VeSom veSom4 = gUpdate.fromJson(responseText, VeSom.class);
+                    data.get(position4).setLydo(veSom4.getLydo());
+                    data.get(position4).setGioravao((veSom4.getGioravao()));
+                    data.get(position4).setGhichu((veSom4.getGhichu()));
+                    notifyItemChanged(position4);
+                    MDToast.makeText(mContext, "Đã cập nhâtj thành công đăng ký về sớm của nhân viên (" + data.get(position4).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                    break;
                 case "XACNHAN_VESOM":
+                    int position = Integer.parseInt(extraData.get("position").toString());
                     Gson g = new Gson();
                     VeSom veSom = g.fromJson(responseText, VeSom.class);
                     data.get(position).setStatus_quanly(veSom.getStatus_quanly());
@@ -419,23 +606,59 @@ public class Adapter_VeSom extends RecyclerView.Adapter<Adapter_VeSom.RecyclerVi
                     notifyItemChanged(position);
                     break;
                 case "PHEDUYET_VESOM":
+                    int position1 = Integer.parseInt(extraData.get("position").toString());
                     Gson g_pheduyet = new Gson();
                     VeSom veSom1 = g_pheduyet.fromJson(responseText, VeSom.class);
-                    data.get(position).setStatus_nhansu(veSom1.getStatus_nhansu());
-                    data.get(position).setNguoiduyet((veSom1.getNguoiduyet()));
-                    notifyItemChanged(position);
+                    data.get(position1).setStatus_nhansu(veSom1.getStatus_nhansu());
+                    data.get(position1).setNguoiduyet((veSom1.getNguoiduyet()));
+                    notifyItemChanged(position1);
                     break;
                 case "DELETE_NHANVIEN_VESOM":
+                    int position3 = Integer.parseInt(extraData.get("position").toString());
                     try {
                         jsonObject = new JSONObject(responseText);
                         String status = jsonObject.getString("status");
                         if (status.equals("OK")) {
-                            MDToast.makeText(mContext, "Đã xóa thành công đăng ký về sớm của nhân viên (" + data.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                            data.remove(position);
+                            MDToast.makeText(mContext, "Đã xóa thành công đăng ký về sớm của nhân viên (" + data.get(position3).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                            data.remove(position3);
                             notifyDataSetChanged();
                         } else {
-                            MDToast.makeText(mContext, "Phiếu đăng ký đi về sớm của nhân viên (" + data.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                            MDToast.makeText(mContext, "Phiếu đăng ký đi về sớm của nhân viên (" + data.get(position3).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
                         }
+                    } catch (JSONException e) {
+                        MDToast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
+                    }
+                    break;
+                case "LOAD_LOAINGHIPHEP":
+                    Gson gson_loainghiphep = new Gson();
+                    TypeToken<List<LoaiNghiPhep>> token_loainghiphep = new TypeToken<List<LoaiNghiPhep>>() {
+                    };
+                    List<LoaiNghiPhep> donVis = gson_loainghiphep.fromJson(responseText, token_loainghiphep.getType());
+                    lstLoaiNghiPhep = new ArrayList<LoaiNghiPhep>();
+                    lstLoaiNghiPhep.addAll(donVis);
+                    break;
+                case "LOAD_THONGTIN":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        StrMaNV = jsonObject.getString("manv");
+                        txtMaNV.setText(jsonObject.getString("manv"));
+                        txtHoTen.setText(jsonObject.getString("tennv"));
+                        txtPhanXuong.setText(jsonObject.getString("tenpx"));
+                        txtLyDo.setText(jsonObject.getString("loainghiphep"));
+                        StrMaloainghiphep = jsonObject.getString("maloainghiphep");
+                        StrTuNgay = jsonObject.getString("ngaynhap2");
+                        txtGioRa.setText(jsonObject.getString("giodi"));
+                        StrGioRa = jsonObject.getString("giodi2");
+                        StrDenNgay = jsonObject.getString("ngaynhap2");
+                        txtGioVao.setText(jsonObject.getString("giove"));
+                        StrGioVao = jsonObject.getString("giove2");
+                        if(StrGioVao.equals("null")){
+                            StrGioVao="";
+                            txtGioVao.setText("");
+                            StrDenNgay="";
+                        }
+                        txtGhiChu.setText(jsonObject.getString("ghichu"));
+
                     } catch (JSONException e) {
                         MDToast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
                     }

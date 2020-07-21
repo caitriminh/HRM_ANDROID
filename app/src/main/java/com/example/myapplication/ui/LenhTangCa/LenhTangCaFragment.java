@@ -208,7 +208,7 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
 
         LoadMaLenh();
 
-        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
         dialog.setContentView(view_bottom_sheet);
         dialog.setCancelable(false);
         dialog.show();

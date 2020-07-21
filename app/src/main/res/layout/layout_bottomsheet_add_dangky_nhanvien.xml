@@ -31,65 +31,25 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txtMaLenh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_ct_nghiphep"
-                        android:drawablePadding="10dp"
-                        android:focusable="false" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txtPhanXuongTC"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_phanxuong"
-                        android:drawablePadding="10dp"
-                        android:focusable="false" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhóm công việc">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txtNhomCongViec"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_lydo"
-                        android:drawablePadding="10dp"
-                        android:focusable="false" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Mã nhân viên">
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:hint="Mã nhân viên"
+                    android:paddingEnd="4dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtMaNV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_input_ma"
+                        android:drawableLeft="@drawable/ic_ct_nghiphep"
                         android:drawablePadding="10dp" />
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="55dp"
+                    android:hint="Họ tên">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtHoTen"
@@ -100,10 +60,12 @@
                         android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="55dp"
+                    android:hint="Phân xưởng">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtPhanXuong"
@@ -117,15 +79,32 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Ghi chú">
+                    android:layout_height="55dp"
+                    android:hint="Chuyền">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txtGhiChu"
+                        android:id="@+id/txtChuyen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_lydo"
+                        android:drawablePadding="10dp"
+                        android:focusable="false" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:hint="Tổ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtTo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_ghichu"
-                        android:drawablePadding="10dp" />
+                        android:drawablePadding="10dp"
+                        android:focusable="false"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -148,9 +127,9 @@
             android:background="@color/colorPrimary"
             android:paddingRight="8dp"
             android:text="LƯU"
+            android:textColor="@color/colorWhite"
             app:icon="@drawable/ic_luu"
-            app:iconGravity="textStart"
-            android:textColor="@color/colorWhite" />
+            app:iconGravity="textStart" />
 
         <Button
             android:id="@+id/btnDong"
@@ -159,12 +138,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_weight="0.5"
-            app:icon="@drawable/ic_close"
-            app:iconTint="#ffffff"
-            app:iconGravity="textStart"
             android:backgroundTint="@color/colorAccent"
             android:text="Đóng"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            app:icon="@drawable/ic_close"
+            app:iconGravity="textStart"
+            app:iconTint="#ffffff" />
     </LinearLayout>
 
 

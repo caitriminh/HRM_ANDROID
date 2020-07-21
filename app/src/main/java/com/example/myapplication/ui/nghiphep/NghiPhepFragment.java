@@ -89,11 +89,9 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
     @BindView(R.id.swiperefresh)
     SwipeRefreshLayout swiperefresh;
 
-    String StrMaloainghiphep = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
     Context mContext;
-
+    String StrMaloainghiphep = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
     TextInputEditText txtMaNV, txtSoNgay, txtGhiChu, txtHoTen, txtPhanXuong, txtTuNgay, txtDenNgay, txtLoaiNghiPhep;
-
     Button btnLuu, btnDong;
     Integer option = 1;
 //    @BindView(R.id.shimmer_view_container)
@@ -162,7 +160,7 @@ public class NghiPhepFragment extends Fragment implements IRequestHttpCallback {
         btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
         btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
         dialog.setContentView(view_bottom_sheet);
         dialog.setCancelable(false);
         dialog.show();

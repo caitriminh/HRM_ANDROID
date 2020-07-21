@@ -194,7 +194,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
 
         txtMaLenh.setText(Modules1.objLenhTangCa.getMalenh());
         txtPhanXuongTC.setText(Modules1.objLenhTangCa.getTenpx());
-        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
         dialog.setContentView(view_bottom_sheet);
         dialog.setCancelable(false);
         dialog.show();
@@ -253,7 +253,6 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
             }
         });
 
-
         btnDong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -262,7 +261,6 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                 fab_menu.close(false);
             }
         });
-
     }
 
     public void ShowLoaiNhomMay(TextView txtNhomCongViec) {
@@ -302,7 +300,6 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
         request.params.put("mapx", Modules1.objLenhTangCa.getMapx());
         request.execute();
     }
-
 
     @OnClick(R.id.btnThem)
     public void ThemLenhTangCa(View view) {

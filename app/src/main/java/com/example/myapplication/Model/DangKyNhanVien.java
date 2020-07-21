@@ -3,7 +3,12 @@ package com.example.myapplication.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class NhanVien {
+public class DangKyNhanVien {
+
+    @SerializedName("id")
+    @Expose
+    private String id;
+
     @SerializedName("manv")
     @Expose
     private String manv;
@@ -16,9 +21,7 @@ public class NhanVien {
     @Expose
     private String tennv;
 
-    @SerializedName("gioitinh")
-    @Expose
-    private String gioitinh;
+
 
     @SerializedName("ngaysinh")
     @Expose
@@ -27,10 +30,6 @@ public class NhanVien {
     @SerializedName("noisinh")
     @Expose
     private String noisinh;
-
-    @SerializedName("diachi")
-    @Expose
-    private String diachi;
 
     @SerializedName("tenpx")
     @Expose
@@ -56,14 +55,6 @@ public class NhanVien {
     @Expose
     private String status;
 
-    @SerializedName("ngayvaolam")
-    @Expose
-    private String ngayvaolam;
-
-    @SerializedName("nguyenquan")
-    @Expose
-    private String nguyenquan;
-
     public String getManv() {
         return manv;
     }
@@ -88,12 +79,12 @@ public class NhanVien {
         this.tennv = tennv;
     }
 
-    public String getGioitinh() {
-        return gioitinh;
+    public String getId() {
+        return id;
     }
 
-    public void setGioitinh(String gioitinh) {
-        this.gioitinh = gioitinh;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNgaysinh() {
@@ -104,36 +95,12 @@ public class NhanVien {
         this.ngaysinh = ngaysinh;
     }
 
-    public String getNgayvaolam() {
-        return ngayvaolam;
-    }
-
-    public void setNgayvaolam(String ngayvaolam) {
-        this.ngayvaolam = ngayvaolam;
-    }
-
     public String getNoisinh() {
         return noisinh;
     }
 
     public void setNoisinh(String noisinh) {
         this.noisinh = noisinh;
-    }
-
-    public String getNguyenquan() {
-        return nguyenquan;
-    }
-
-    public void setNguyenquan(String nguyenquan) {
-        this.nguyenquan = nguyenquan;
-    }
-
-    public String getDiachi() {
-        return diachi;
-    }
-
-    public void setDiachi(String diachi) {
-        this.diachi = diachi;
     }
 
     public String getTenpx() {
@@ -183,4 +150,5 @@ public class NhanVien {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

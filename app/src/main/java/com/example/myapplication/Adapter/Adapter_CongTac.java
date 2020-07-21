@@ -1,20 +1,28 @@
 package com.example.myapplication.Adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,13 +34,17 @@ import com.example.myapplication.AsyncPostHttpRequest;
 import com.example.myapplication.Helper.ImageHelper;
 import com.example.myapplication.Interface.IRequestHttpCallback;
 import com.example.myapplication.Model.CongTac;
+import com.example.myapplication.Model.LoaiNghiPhep;
 import com.example.myapplication.Model.NghiPhep;
 import com.example.myapplication.Model.VeSom;
 import com.example.myapplication.Modules1;
 import com.example.myapplication.R;
 import com.example.myapplication.ui.CongTac.CongTac_Activity;
 import com.example.myapplication.ui.VeSom.VeSom_Activity;
+import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.skydoves.powermenu.MenuAnimation;
@@ -49,7 +61,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,13 +75,17 @@ import butterknife.Unbinder;
 public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.RecyclerViewHolder> implements IRequestHttpCallback {
     private Context mContext;
     private List<CongTac> data = new ArrayList<>();
+    ArrayList<LoaiNghiPhep> lstLoaiNghiPhep;
     CongTac congTac;
     private List<CongTac> temp = new ArrayList<>();
     private Unbinder unbinder;
-
-    Integer option = 1, position_item = -1;
+    View view;
+    Integer option = 1, position_item = -1, mMinute = 0, mHour = 0;
     PowerMenu powerMenu;
     IRequestHttpCallback iRequestHttpCallback;
+    TextInputEditText txtHoTen, txtPhanXuong, txtLoaiNghiPhep, txtTuNgay, txtDenNgay, txtGioRa, txtGioVao, txtMaNV, txtGhiChu;
+    Button btnLuu, btnDong;
+    String StrMaloainghiphep = "", StrGioRa = "", StrGioVao = "", StrTuNgay = "", StrDenNgay = "", StrMaNV = "";
 
     public Adapter_CongTac(Context mContext, List<CongTac> data) {
         this.data = data;
@@ -80,8 +98,229 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.cardview_item_congtac, parent, false);
+        view = inflater.inflate(R.layout.cardview_item_congtac, parent, false);
         return new RecyclerViewHolder(view);
+    }
+
+    public void ShowLoaiNghiPhep(TextView txtLoaiNghiPhep) {
+        txtLoaiNghiPhep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Chọn loại nghỉ phép");
+                builder.setCancelable(false);
+                String[] arrayLoaiNghiPhep = new String[lstLoaiNghiPhep.size()];
+                int i = 0;
+                for (LoaiNghiPhep loaiNghiPhep : lstLoaiNghiPhep) {
+                    arrayLoaiNghiPhep[i] = loaiNghiPhep.getLoainghiphep();
+                    i++;
+                }
+                ;
+                builder.setSingleChoiceItems(arrayLoaiNghiPhep, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        LoaiNghiPhep loaiNghiPhep = lstLoaiNghiPhep.get(i);
+                        txtLoaiNghiPhep.setText(loaiNghiPhep.getLoainghiphep());
+                        StrMaloainghiphep = loaiNghiPhep.getMaloainghiphep();
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void LoadLoaiNghiPhep() {
+        String url = Modules1.BASE_URL + "load_loainghiphep";
+        String TAG = "LOAD_LOAINGHIPHEP";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.params.put("option", 4);
+        request.execute();
+    }
+
+    public void SuaNhanVienCongTac() {
+        View view_bottom_sheet = LayoutInflater.from(view.getContext()).inflate(R.layout.layout_bottomsheet_add_congtac, null);
+        txtMaNV = view_bottom_sheet.findViewById(R.id.txtMaNV);
+        txtGhiChu = view_bottom_sheet.findViewById(R.id.txtGhiChu);
+        txtHoTen = view_bottom_sheet.findViewById(R.id.txtHoTen);
+        txtPhanXuong = view_bottom_sheet.findViewById(R.id.txtPhanXuong);
+        txtGioRa = view_bottom_sheet.findViewById(R.id.txtGioRa);
+        txtTuNgay = view_bottom_sheet.findViewById(R.id.txtTuNgay);
+        txtGioVao = view_bottom_sheet.findViewById(R.id.txtGioVao);
+        txtDenNgay = view_bottom_sheet.findViewById(R.id.txtDenNgay);
+        txtLoaiNghiPhep = view_bottom_sheet.findViewById(R.id.txtLoaiNghiPhep);
+
+        btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
+        btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
+
+        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
+        dialog.setContentView(view_bottom_sheet);
+        dialog.setCancelable(false);
+        dialog.show();
+
+        ShowLoaiNghiPhep(txtLoaiNghiPhep);
+
+        //Thêm ngày nhập
+        txtTuNgay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                                calendar.set(year, month, day);
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                String strDate = formatter.format(calendar.getTime());
+
+                                txtTuNgay.setText(strDate);
+                                //Lấy giá trị gửi lên server
+                                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
+                                StrTuNgay = formatter2.format(calendar.getTime());
+
+                            }
+                        }, year, month, dayOfMonth);
+
+                datePickerDialog.show();
+            }
+        });
+
+        txtGioRa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        txtGioRa.setText(hourOfDay + ":" + minute);
+                        StrGioRa = hourOfDay + ":" + minute;
+                    }
+                }, mHour, mMinute, false);
+                timePickerDialog.show();
+
+            }
+        });
+
+        //Thêm ngày nhập
+        txtDenNgay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                                calendar.set(year, month, day);
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                String strDate = formatter.format(calendar.getTime());
+
+                                txtDenNgay.setText(strDate);
+                                //Lấy giá trị gửi lên server
+                                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
+                                StrDenNgay = formatter2.format(calendar.getTime());
+
+                            }
+                        }, year, month, dayOfMonth);
+
+                datePickerDialog.show();
+            }
+        });
+
+        txtGioVao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mMinute = c.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        txtGioVao.setText(hourOfDay + ":" + minute);
+                        StrGioVao = hourOfDay + ":" + minute;
+                    }
+                }, mHour, mMinute, false);
+                timePickerDialog.show();
+
+            }
+        });
+
+        btnLuu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (txtMaNV.getText().equals("")) {
+                    MDToast.makeText(mContext, "Vui lòng nhập vào mã nhân viên.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrMaloainghiphep.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng chọn loại đi công tác", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrTuNgay.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng nhập ngày đi công tác", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrGioRa.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng nhập vào giờ đi công tác", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrDenNgay.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng nhập ngày về công tác", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                if (StrGioVao.equals("")) {
+                    MDToast.makeText(mContext, "Bạn vui lòng nhập vào giờ về công tác", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    return;
+                }
+
+                String url = Modules1.BASE_URL + "update_nhanvien_nghiphep_vesom_congtac";
+                String TAG = "UPDATE_NHANVIEN_CONGTAC";
+                AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+                //Gửi user va Pass len server
+                request.params.put("option", 1);
+                request.params.put("id", congTac.getId());
+                request.params.put("maloainghiphep", StrMaloainghiphep);
+                request.params.put("tungay", StrTuNgay + " " + StrGioRa);
+                request.params.put("denngay", StrDenNgay + " " + StrGioVao);
+                request.params.put("songay", 0);
+                request.params.put("ghichu", txtGhiChu.getText().toString());
+                request.params.put("nguoitd2", Modules1.tendangnhap);
+                request.extraData.put("position", position_item);
+                request.execute();
+
+                dialog.setCancelable(true);
+                dialog.dismiss();
+            }
+        });
+
+        btnDong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.setCancelable(true);
+                dialog.dismiss();
+            }
+        });
+
     }
 
     @NonNull
@@ -135,6 +374,7 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                         // .setHeaderView(R.layout.layout_dialog_header)
                         .addItem(new PowerMenuItem("Xác nhận", R.drawable.ic_baseline_security_24, "XACNHAN")) // add an item.
                         .addItem(new PowerMenuItem("Phê duyệt", R.drawable.ic_menu_pheduyet, "PHEDUYET")) // aad an item list.
+                        .addItem(new PowerMenuItem("Chỉnh sửa", R.drawable.ic_chinhsua, "CHINHSUA")) // add an item.
                         .addItem(new PowerMenuItem("Nhật ký đi công tác", R.drawable.ic_ct_nghiphep, "NHATKY")) // aad an item list.
                         .addItem(new PowerMenuItem("Xem ảnh", R.drawable.ic_menu_xemanh, "XEMANH")) // aad an item list.
                         .addItem(new PowerMenuItem("Xóa", R.drawable.ic_delete, "XOA")) // aad an item list.
@@ -161,7 +401,7 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
     private OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = new OnMenuItemClickListener<PowerMenuItem>() {
         @Override
         public void onItemClick(int position, PowerMenuItem item) {
-            CongTac congTac = data.get(position_item);
+            congTac = data.get(position_item);
             String TAG = item.getTag().toString();
             switch (TAG) {
                 case "XACNHAN":
@@ -173,6 +413,15 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                     break;
                 case "PHEDUYET":
                     PheDuyet_CongTac(congTac, position_item);
+                    break;
+                case "CHINHSUA":
+                    if (congTac.getStatus_nhansu().equals("YES") || congTac.getStatus_nhansu().equals("NO") || congTac.getStatus_quanly().equals("YES") || congTac.getStatus_quanly().equals("NO")) {
+                        MDToast.makeText(mContext, "Phiếu đăng ký về sớm của nhân viên (" + congTac.getTennv() + ") đã được phê duyêt.", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                    } else {
+                        LoadThongTinNhanVien();
+                        LoadLoaiNghiPhep();
+                        SuaNhanVienCongTac();
+                    }
                     break;
                 case "NHATKY":
                     Modules1.strMaNV = data.get(position_item).getManv2();
@@ -400,13 +649,53 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
         mBottomSheetDialog.show();
     }
 
+    public void LoadThongTinNhanVien() {
+        String url = Modules1.BASE_URL + "getthongtin_nghiphep_vesom_congtac";
+        String TAG = "LOAD_THONGTIN";
+        AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
+        request.params.put("id", congTac.getId());
+        request.execute();
+    }
+
     @Override
     public void OnDoneRequest(boolean isSuccess, String TAG, int statusCode, String responseText, Map<String, Object> extraData) {
         if (isSuccess) {
             JSONObject jsonObject = null;
-            int position = Integer.parseInt(extraData.get("position").toString());
             switch (TAG) {
+                case "UPDATE_NHANVIEN_CONGTAC":
+                    int position4 = Integer.parseInt(extraData.get("position").toString());
+                    Gson gUpdate = new Gson();
+                    CongTac congTac4 = gUpdate.fromJson(responseText, CongTac.class);
+                    data.get(position4).setLydo(congTac4.getLydo());
+                    data.get(position4).setNgaycongtac((congTac4.getNgaycongtac()));
+                    data.get(position4).setGhichu((congTac4.getGhichu()));
+                    notifyItemChanged(position4);
+                    break;
+                case "LOAD_THONGTIN":
+                    try {
+                        jsonObject = new JSONObject(responseText);
+                        StrMaNV = jsonObject.getString("manv");
+                        txtMaNV.setText(jsonObject.getString("manv"));
+                        txtHoTen.setText(jsonObject.getString("tennv"));
+                        txtPhanXuong.setText(jsonObject.getString("tenpx"));
+                        txtLoaiNghiPhep.setText(jsonObject.getString("loainghiphep"));
+                        StrMaloainghiphep = jsonObject.getString("maloainghiphep");
+                        txtTuNgay.setText(jsonObject.getString("tungay"));
+                        StrTuNgay = jsonObject.getString("tungay2");
+                        txtGioRa.setText(jsonObject.getString("giodi"));
+                        StrGioRa = jsonObject.getString("giodi2");
+                        txtDenNgay.setText(jsonObject.getString("denngay"));
+                        StrDenNgay = jsonObject.getString("denngay2");
+                        txtGioVao.setText(jsonObject.getString("giove"));
+                        StrGioVao = jsonObject.getString("giove2");
+                        txtGhiChu.setText(jsonObject.getString("ghichu"));
+
+                    } catch (JSONException e) {
+                        MDToast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
+                    }
+                    break;
                 case "XACNHAN_CONGTAC":
+                    int position = Integer.parseInt(extraData.get("position").toString());
                     Gson g = new Gson();
                     CongTac congTac = g.fromJson(responseText, CongTac.class);
                     data.get(position).setStatus_quanly(congTac.getStatus_quanly());
@@ -414,22 +703,24 @@ public class Adapter_CongTac extends RecyclerView.Adapter<Adapter_CongTac.Recycl
                     notifyItemChanged(position);
                     break;
                 case "PHEDUYET_CONGTAC":
+                    int position2 = Integer.parseInt(extraData.get("position").toString());
                     Gson g_pheduyet = new Gson();
                     CongTac congTac1 = g_pheduyet.fromJson(responseText, CongTac.class);
-                    data.get(position).setStatus_nhansu(congTac1.getStatus_nhansu());
-                    data.get(position).setNguoiduyet((congTac1.getNguoiduyet()));
-                    notifyItemChanged(position);
+                    data.get(position2).setStatus_nhansu(congTac1.getStatus_nhansu());
+                    data.get(position2).setNguoiduyet((congTac1.getNguoiduyet()));
+                    notifyItemChanged(position2);
                     break;
                 case "DELETE_NHANVIEN_CONGTAC":
+                    int position3 = Integer.parseInt(extraData.get("position").toString());
                     try {
                         jsonObject = new JSONObject(responseText);
                         String status = jsonObject.getString("status");
                         if (status.equals("OK")) {
-                            MDToast.makeText(mContext, "Đã xóa thành công đăng ký đi công tác của nhân viên (" + data.get(position).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                            data.remove(position);
+                            MDToast.makeText(mContext, "Đã xóa thành công đăng ký đi công tác của nhân viên (" + data.get(position3).getTennv() + ")", Toast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                            data.remove(position3);
                             notifyDataSetChanged();
                         } else {
-                            MDToast.makeText(mContext, "Phiếu đăng ký đi công tác của nhân viên (" + data.get(position).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
+                            MDToast.makeText(mContext, "Phiếu đăng ký đi công tác của nhân viên (" + data.get(position3).getTennv() + ") đã được duyệt", Toast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
                         }
                     } catch (JSONException e) {
                         MDToast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
