@@ -47,6 +47,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.65"
                     android:gravity="right|center_vertical"
+                    android:paddingRight="6dp"
                     android:text="Nơi khám: BỆNH VIỆN CHỢ RẪY"
                     android:textStyle="bold"></TextView>
             </LinearLayout>
@@ -73,6 +74,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
                     android:gravity="right|center_vertical"
+                    android:paddingRight="6dp"
                     android:text="Đến ngày: 25/12/2019"></TextView>
             </LinearLayout>
 
@@ -112,6 +114,7 @@
                     android:gravity="right|center_vertical"
                     android:paddingLeft="6dp"
                     android:text="Số tiền: 175,000"
+                    android:paddingRight="6dp"
                     android:textStyle="bold"></TextView>
 
             </LinearLayout>

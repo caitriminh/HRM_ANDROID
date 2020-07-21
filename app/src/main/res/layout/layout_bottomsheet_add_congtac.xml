@@ -14,14 +14,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,8 +47,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:hint="Họ tên"
-                    >
+                    android:hint="Họ tên">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtHoTen"
@@ -63,7 +63,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:hint="Phân xưởng"                    >
+                    android:hint="Phân xưởng">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtPhanXuong"
@@ -208,9 +208,9 @@
             android:background="@color/colorPrimary"
             android:paddingRight="8dp"
             android:text="LƯU"
+            android:textColor="@color/colorWhite"
             app:icon="@drawable/ic_luu"
-            app:iconGravity="textStart"
-            android:textColor="@color/colorWhite" />
+            app:iconGravity="textStart" />
 
 
         <Button
@@ -220,12 +220,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_weight="0.5"
-            app:icon="@drawable/ic_close"
-            app:iconTint="#ffffff"
-            app:iconGravity="textStart"
             android:backgroundTint="@color/colorAccent"
             android:text="Đóng"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            app:icon="@drawable/ic_close"
+            app:iconGravity="textStart"
+            app:iconTint="#ffffff" />
     </LinearLayout>
 
 

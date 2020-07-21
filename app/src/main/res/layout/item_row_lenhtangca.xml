@@ -1,91 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_id"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:orientation="horizontal">
+    android:layout_height="120dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:theme="@style/AppTheme"
+    cardview:cardCornerRadius="4dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview_id"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:clickable="true"
-
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.0px"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:weightSum="1.2">
-
-            <TextView
-                android:id="@+id/txtMaLenh"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.22"
-                android:gravity="center|left"
-                android:text="LTC01200007"
-                android:textSize="11dp"></TextView>
-
-            <TextView
-                android:id="@+id/txtNgayTangCa"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:gravity="center|left"
-                android:text="25/12/2020"
-                android:textSize="11dp"
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                android:id="@+id/txtPhanXuong"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:ellipsize="end"
-                android:gravity="center|left"
-                android:maxLines="1"
-                android:scrollHorizontally="false"
-                android:singleLine="true"
-                android:text="ĐỊNH PHÔI"
-                android:textSize="11dp"></TextView>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="5">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.48"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/txtNhomCongViec"
+                    android:id="@+id/txtMaLenh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingLeft="6dp"
+                    android:gravity="left|center_vertical"
+                    android:text="Mã lệnh: LTC0720003"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/txtNgayTangCa"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="6dp"
+                    android:text="Ngày tăng ca: 20/07/2020"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtPhanXuong"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="6dp"
+                android:gravity="left|center_vertical"
+                android:text="Phân xưởng: ĐỊNH PHÔI"></TextView>
+
+
+            <TextView
+                android:id="@+id/txtNhomCongViec"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="6dp"
+                android:gravity="left|center_vertical"
+                android:text="Công việc: BÀO 4 MẶT"></TextView>
+
+            <TextView
+                android:id="@+id/txtMaTangCa"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="6dp"
+                android:gravity="left|center_vertical"
+                android:text="Loại tăng ca: Tăng ca từ 26-22h"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                >
+                <TextView
+                    android:id="@+id/txtTinhTrang"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.9"
-                    android:ellipsize="end"
+                    android:paddingLeft="6dp"
                     android:gravity="left|center_vertical"
-                    android:maxLines="1"
-                    android:scrollHorizontally="false"
-                    android:singleLine="true"
-                    android:text="15:30"
-                    android:textSize="11dp"></TextView>
+                    android:text="Tình trạng: Đã thanh toán"
+                    android:textStyle="bold"></TextView>
 
                 <TextView
                     android:id="@+id/txtMenuOpTion"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
-                   android:gravity="center"
+                    android:gravity="center|center_vertical"
+                    android:paddingLeft="6dp"
                     android:text="&#8942;"
-                    android:textStyle="bold"
-                    android:textSize="20dp"></TextView>
-            </LinearLayout>
+                    android:paddingRight="6dp"
+                    android:textSize="16dp"
+                    android:textStyle="bold"></TextView>
 
+            </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

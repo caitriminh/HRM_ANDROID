@@ -66,7 +66,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -185,7 +187,6 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
     public void LoadData() {
         String url = Modules1.BASE_URL + "load_lenhtangca";
         String TAG = "LOAD_LENHTANGCA";
-
         AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
         request.params.put("option", option);
         request.params.put("tungay", strTuNgay);
@@ -290,12 +291,6 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                 request.params.put("nguoitd", Modules1.tendangnhap);
                 request.extraData.put("malenh", strMaLenh);
                 request.execute();
-
-//                dialog.setCancelable(true);
-//                dialog.dismiss();
-
-                txtNhomCongViec.setText(" Chọn nhóm công việc: ");
-                txtGhiChu.setText("");
             }
         });
 
@@ -508,6 +503,8 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                     break;
                 case "INSERT_LENHTANGCA":
                     LoadData();
+                    txtNhomCongViec.setText("");
+                    txtGhiChu.setText("");
                     break;
                 case "LOAD_LOAITANGCA":
                     Gson gsonLoaiTangCa = new Gson();
@@ -538,6 +535,9 @@ public class LenhTangCaFragment extends Fragment implements IRequestHttpCallback
                         jsonObject = new JSONObject(responseText);
                         strMaLenh = jsonObject.getString("malenh");
                         txtMaLenh.setText(strMaLenh);
+                        strNgayTangCa = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+                        txtNgayTangCa.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
+
                     } catch (JSONException e) {
                         MDToast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG, MDToast.TYPE_ERROR).show();
                     }

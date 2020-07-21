@@ -85,6 +85,8 @@ public class Adapter_LenhTangCa extends RecyclerView.Adapter<Adapter_LenhTangCa.
         holder.txtNgayTangCa.setText(data.get(position).getNgaytangca());
         holder.txtPhanXuong.setText(data.get(position).getTenpx());
         holder.txtNhomCongViec.setText(data.get(position).getNhommay());
+        holder.txtTinhTrang.setText(data.get(position).getTinhtrang());
+        holder.txtMaTangCa.setText(data.get(position).getLoaitangca());
 
         String status = data.get(position).getStatus();
         if (status.equals("NO")) {
@@ -216,6 +218,12 @@ public class Adapter_LenhTangCa extends RecyclerView.Adapter<Adapter_LenhTangCa.
 
         @BindView(R.id.txtMenuOpTion)
         TextView txtMenuOpTion;
+
+        @BindView(R.id.txtTinhTrang)
+        TextView txtTinhTrang;
+
+        @BindView(R.id.txtMaTangCa)
+        TextView txtMaTangCa;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);

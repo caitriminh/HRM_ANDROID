@@ -192,8 +192,8 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
         btnLuu = view_bottom_sheet.findViewById(R.id.btnLuu);
         btnDong = view_bottom_sheet.findViewById(R.id.btnDong);
 
-        txtMaLenh.setText(Modules1.objLenhTangCa.getMalenh());
-        txtPhanXuongTC.setText(Modules1.objLenhTangCa.getTenpx());
+        txtMaLenh.setText(Modules1.objLenhTangCa.getMalenh2());
+        txtPhanXuongTC.setText(Modules1.objLenhTangCa.getTenpx2());
         BottomSheetDialog dialog = new BottomSheetDialog(view.getContext(), R.style.DialogBottomStyle);
         dialog.setContentView(view_bottom_sheet);
         dialog.setCancelable(false);
@@ -238,13 +238,13 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                 String TAG = "INSERT_DANGKYTANGCA";
                 AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
                 //Gửi user va Pass len server
-                request.params.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.params.put("malenh", Modules1.objLenhTangCa.getMalenh2());
                 request.params.put("manv", txtMaNV.getText());
                 request.params.put("manhom", strNhomMay);
 
                 request.params.put("ghichu", txtGhiChu.getText().toString());
                 request.params.put("nguoitd", Modules1.tendangnhap);
-                request.extraData.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.extraData.put("malenh", Modules1.objLenhTangCa.getMalenh2());
                 request.execute();
                 txtMaNV.setText("");
                 txtPhanXuong.setText("");
@@ -296,7 +296,7 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
         String url = Modules1.BASE_URL + "load_nhommay_lenhtangca";
         String TAG = "LOAD_NHOMMAY";
         AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
-        request.params.put("malenh", Modules1.objLenhTangCa.getMalenh());
+        request.params.put("malenh", Modules1.objLenhTangCa.getMalenh2());
         request.params.put("mapx", Modules1.objLenhTangCa.getMapx());
         request.execute();
     }
@@ -329,13 +329,13 @@ public class NhanVienTangCa_MaLenh_Activity extends AppCompatActivity implements
                 String TAG = "INSERT_DANGKYTANGCA";
                 AsyncPostHttpRequest request = new AsyncPostHttpRequest(url, iRequestHttpCallback, TAG);
                 //Gửi user va Pass len server
-                request.params.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.params.put("malenh", Modules1.objLenhTangCa.getMalenh2());
                 request.params.put("manv", strMaNV);
                 request.params.put("manhom", Modules1.objLenhTangCa.getManhom());
 
                 request.params.put("ghichu", "SCAN QR");
                 request.params.put("nguoitd", Modules1.tendangnhap);
-                request.extraData.put("malenh", Modules1.objLenhTangCa.getMalenh());
+                request.extraData.put("malenh", Modules1.objLenhTangCa.getMalenh2());
                 request.execute();
             }
 
