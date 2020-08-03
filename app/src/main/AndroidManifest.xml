@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication">
+    package="com.example.HRM">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -15,26 +15,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ScanQR.ScanQR_Activity"></activity>
+        <activity android:name="com.example.HRM.ui.ScanQR.ScanQR_Activity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.HRM.MainActivity"
             android:label="@string/title_activity_main"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".ui.NhatKyQuetThe.NhatKyQuetThe_MaNV_Activity" />
-        <activity android:name=".ui.nghiphep.NghiPhep_MaNV_Activity" />
-        <activity android:name=".ui.LenhTangCa.NhanVienTangCa_MaLenh_Activity" />
-        <activity android:name=".ui.PhuLucHopDong.PhuLucHopDong_Activity" />
-        <activity android:name=".ui.PhepNam.CTPhepNam_Activity" />
-        <activity android:name=".ui.CongTac.CongTac_Activity" />
-        <activity android:name=".ui.VeSom.VeSom_Activity" />
-        <activity android:name=".ui.CheDoBaoHiem.CheDoBaoHiem_Activity" />
-        <activity android:name=".ui.nhanvien.HDLD_Activity" />
-        <activity android:name=".ui.thaisan.NhatKyKhamThai_Activity" />
-        <activity android:name=".ui.NhatKyQuetThe.CTQuetTheMaNV_Activity" />
-        <activity android:name=".ui.nhanvien.NhanVienQuanLy_Activity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name="com.example.HRM.ui.NhatKyQuetThe.NhatKyQuetThe_MaNV_Activity" />
+        <activity android:name="com.example.HRM.ui.nghiphep.NghiPhep_MaNV_Activity" />
+        <activity android:name="com.example.HRM.ui.LenhTangCa.NhanVienTangCa_MaLenh_Activity" />
+        <activity android:name="com.example.HRM.ui.PhuLucHopDong.PhuLucHopDong_Activity" />
+        <activity android:name="com.example.HRM.ui.PhepNam.CTPhepNam_Activity" />
+        <activity android:name="com.example.HRM.ui.CongTac.CongTac_Activity" />
+        <activity android:name="com.example.HRM.ui.VeSom.VeSom_Activity" />
+        <activity android:name="com.example.HRM.ui.CheDoBaoHiem.CheDoBaoHiem_Activity" />
+        <activity android:name="com.example.HRM.ui.nhanvien.HDLD_Activity" />
+        <activity android:name="com.example.HRM.ui.thaisan.NhatKyKhamThai_Activity" />
+        <activity android:name="com.example.HRM.ui.NhatKyQuetThe.CTQuetTheMaNV_Activity" />
+        <activity android:name="com.example.HRM.ui.nhanvien.NhanVienQuanLy_Activity" />
+        <activity android:name="com.example.HRM.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

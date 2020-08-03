@@ -46,6 +46,13 @@
             fab:fab_size="mini"
            />
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/btnThem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_nhanvien"
+            fab:fab_size="mini"
+            />
     </com.github.clans.fab.FloatingActionMenu>
 
 

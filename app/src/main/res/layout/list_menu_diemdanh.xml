@@ -22,13 +22,6 @@
         fab:menu_backgroundColor="#ccffffff"
 
        >
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/btnQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_qr"
-            fab:fab_size="mini"
-            />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/btnTimKiem"
@@ -45,14 +38,6 @@
             android:src="@drawable/ic_tatca"
             fab:fab_size="mini"
            />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/btnThem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_nhanvien"
-            fab:fab_size="mini"
-            />
 
     </com.github.clans.fab.FloatingActionMenu>
 
